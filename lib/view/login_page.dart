@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/view/create_account_page.dart';
+import 'package:mobile/view/forget_password_page.dart';
 
-class TelaCriarConta extends StatefulWidget {
-  const TelaCriarConta({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<TelaCriarConta> createState() => _TelaCriarContaState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _TelaCriarContaState extends State<TelaCriarConta> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
 
   bool isLoading = false;
   bool obscurePassword = true;
 
-  void register() {
+  void login() {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
 
@@ -27,20 +26,23 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
         setState(() => isLoading = false);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Conta criada com sucesso')),
+          const SnackBar(content: Text('Login realizado com sucesso!')),
         );
-
-        Navigator.pop(context);
       });
     }
+  }
+
+  void forgotPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ForgetPasswordPage()),
+    );
   }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    nameController.dispose();
-    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -50,18 +52,17 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
         child: Center(
-          // ✅ mantém centralizado
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min, // ✅ não estica
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Criar Conta',
+                      'Login',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -71,27 +72,6 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
 
                     const SizedBox(height: 40),
 
-                    // NOME
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        labelText: 'Nome',
-                        prefixIcon: const Icon(Icons.person),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Informe seu nome';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // EMAIL
                     TextFormField(
                       controller: emailController,
                       decoration: InputDecoration(
@@ -103,7 +83,7 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Informe o email';
+                          return 'Informe o seu email';
                         }
                         if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
                           return 'Email inválido';
@@ -114,7 +94,6 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
 
                     const SizedBox(height: 16),
 
-                    // SENHA
                     TextFormField(
                       controller: passwordController,
                       obscureText: obscurePassword,
@@ -139,10 +118,24 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Informe a senha';
+                          return 'Informe a sua senha';
                         }
-                        if (value.length < 6) {
-                          return 'Mínimo 6 caracteres';
+                        if (value.length < 8) {
+                          return 'Deve conter no mínimo de 8 caracteres';
+                        }
+                        if (!value.contains(RegExp(r'[A-Z]'))) {
+                          return 'Deve conter pelo menos 1 letra maiúscula';
+                        }
+                        if (!value.contains(RegExp(r'[a-z]'))) {
+                          return 'Deve conter pelo menos 1 letra minúscula';
+                        }
+                        if (!value.contains(RegExp(r'[0-9]'))) {
+                          return 'Deve conter pelo menos 1 número';
+                        }
+                        if (!value.contains(
+                          RegExp(r'[!@#$%^&*(),.?":{}|<>]'),
+                        )) {
+                          return 'Deve conter pelo menos 1 caractere especial';
                         }
                         return null;
                       },
@@ -150,36 +143,26 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
 
                     const SizedBox(height: 10),
 
-                    // CONFIRMAR SENHA
-                    TextFormField(
-                      controller: confirmPasswordController,
-                      obscureText: obscurePassword,
-                      decoration: InputDecoration(
-                        labelText: 'Confirmar senha',
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: forgotPassword,
+                        child: const Text(
+                          'Esqueci a minha senha',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 14, 134, 34),
+                          ),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Confirme a senha';
-                        }
-                        if (value != passwordController.text) {
-                          return 'As senhas não coincidem';
-                        }
-                        return null;
-                      },
                     ),
 
                     const SizedBox(height: 20),
 
-                    // BOTÃO
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: isLoading ? null : register,
+                        onPressed: isLoading ? null : login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
@@ -191,7 +174,7 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
                                 color: Colors.white,
                               )
                             : const Text(
-                                'CRIAR CONTA',
+                                'ENTRAR',
                                 style: TextStyle(color: Colors.white),
                               ),
                       ),
@@ -199,17 +182,21 @@ class _TelaCriarContaState extends State<TelaCriarConta> {
 
                     const SizedBox(height: 20),
 
-                    // VOLTAR LOGIN
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Já tem uma conta?'),
+                        const Text('Não possui uma conta?'),
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CreateAccountPage(),
+                              ),
+                            );
                           },
                           child: const Text(
-                            'Fazer login',
+                            'Criar conta',
                             style: TextStyle(
                               color: Color.fromARGB(255, 14, 134, 34),
                             ),
