@@ -59,6 +59,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Center(
+                      child: Image.asset(
+                        'assets/images/cancha_logo.png',
+                        height: 250,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
                     const Text(
                       'Criar Conta',
                       style: TextStyle(

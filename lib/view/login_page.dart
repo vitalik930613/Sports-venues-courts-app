@@ -61,6 +61,14 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Center(
+                      child: Image.asset(
+                        'assets/images/cancha_logo.png',
+                        height: 250,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
                     const Text(
                       'Login',
                       style: TextStyle(
