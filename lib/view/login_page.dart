@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/view/create_account_page.dart';
 import 'package:mobile/view/forget_password_page.dart';
+import 'package:mobile/view/home_page.dart';
+import 'package:mobile/viewmodel/auth_viewmodel.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,17 +20,29 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   bool obscurePassword = true;
 
-  void login() {
+  void login() async {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
-
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() => isLoading = false);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login realizado com sucesso!')),
+      try {
+        final success = await AuthViewModel.instance.login(
+          emailController.text,
+          passwordController.text,
         );
-      });
+        if (success && mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomePage()),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          );
+        }
+      } finally {
+        if (mounted) setState(() => isLoading = false);
+      }
     }
   }
 

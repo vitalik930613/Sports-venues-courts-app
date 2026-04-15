@@ -1,9 +1,9 @@
 class CourtSchedule {
   final int id;
   final int courtId;
-  final String openingTime; // "HH:MM:SS"
+  final String openingTime;
   final String closingTime;
-  final int gameDuration; // minutes
+  final int gameDuration;
   final double priceBrl;
   final double priceUyu;
 

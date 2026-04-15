@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/viewmodel/auth_viewmodel.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -15,23 +16,39 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  DateTime? selectedBirthDate;
 
   bool isLoading = false;
   bool obscurePassword = true;
-
-  void register() {
-    if (_formKey.currentState!.validate()) {
+  void register() async {
+    if (_formKey.currentState!.validate() && selectedBirthDate != null) {
       setState(() => isLoading = true);
-
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() => isLoading = false);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Conta criada com sucesso')),
+      try {
+        final birthDateStr =
+            '${selectedBirthDate!.year}-${selectedBirthDate!.month.toString().padLeft(2, '0')}-${selectedBirthDate!.day.toString().padLeft(2, '0')}';
+        final success = await AuthViewModel.instance.register(
+          name: nameController.text,
+          email: emailController.text,
+          phone: phoneController.text,
+          birthDate: birthDateStr,
+          password: passwordController.text,
         );
-
-        Navigator.pop(context);
-      });
+        if (success && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Conta criada com sucesso!')),
+          );
+          Navigator.pop(context);
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          );
+        }
+      } finally {
+        if (mounted) setState(() => isLoading = false);
+      }
     }
   }
 
@@ -41,6 +58,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     passwordController.dispose();
     nameController.dispose();
     confirmPasswordController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
 
@@ -115,6 +133,64 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         }
                         return null;
                       },
+                    ),
+
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                        labelText: 'Telefone',
+                        prefixIcon: const Icon(Icons.phone),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Informe o telefone';
+                        }
+                        if (value.length < 8) return 'Mínimo 8 dígitos';
+                        return null;
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now().subtract(
+                            const Duration(days: 365 * 18),
+                          ),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null) {
+                          setState(() => selectedBirthDate = picked);
+                        }
+                      },
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                          controller: TextEditingController(
+                            text: selectedBirthDate != null
+                                ? '${selectedBirthDate!.year}-${selectedBirthDate!.month.toString().padLeft(2, '0')}-${selectedBirthDate!.day.toString().padLeft(2, '0')}'
+                                : '',
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'Data de nascimento',
+                            prefixIcon: const Icon(Icons.cake),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          validator: (_) {
+                            if (selectedBirthDate == null) {
+                              return 'Informe sua data de nascimento';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
                     ),
 
                     const SizedBox(height: 16),
