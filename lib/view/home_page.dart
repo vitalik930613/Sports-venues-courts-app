@@ -25,10 +25,14 @@ class TimeSlot {
   bool isAvailable;
   bool isSelected;
 
-  TimeSlot({required this.time, this.isAvailable = true, this.isSelected = false});
+  TimeSlot({
+    required this.time,
+    this.isAvailable = true,
+    this.isSelected = false,
+  });
 }
 
-const String logoAsset = 'assets/images/image.png'; // Altere se necessário
+const String logoAsset = 'assets/images/cancha_logo.png';
 
 final List<Court> mockCourts = [
   Court(
@@ -63,22 +67,30 @@ final List<Court> mockCourts = [
     name: 'Quadra 4',
     priceRS: 130.00,
     priceUYU: 1170.00,
-    imageUrl: 'https://quadraspoliesportivas.com.br/wp-content/uploads/2023/03/construcao-de-quadras-abertas-e-cobertas-de-futebol-em-curitiba-7.jpg',
+    imageUrl:
+        'https://quadraspoliesportivas.com.br/wp-content/uploads/2023/03/construcao-de-quadras-abertas-e-cobertas-de-futebol-em-curitiba-7.jpg',
     rating: 4.6,
     distance: 3.1,
   ),
 ];
 
-final List<TimeSlot> mockTimeSlots = List.generate(
-  48,
-  (index) {
-    int hour = 8 + (index ~/ 6);
-    int minute = (index % 6) * 10;
-    String time = '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-    bool isAvailable = index != 2 && index != 3 && index != 15 && index != 16 && index != 27 && index != 28 && index != 39 && index != 40 && index != 45;
-    return TimeSlot(time: time, isAvailable: isAvailable);
-  },
-);
+final List<TimeSlot> mockTimeSlots = List.generate(48, (index) {
+  int hour = 8 + (index ~/ 6);
+  int minute = (index % 6) * 10;
+  String time =
+      '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+  bool isAvailable =
+      index != 2 &&
+      index != 3 &&
+      index != 15 &&
+      index != 16 &&
+      index != 27 &&
+      index != 28 &&
+      index != 39 &&
+      index != 40 &&
+      index != 45;
+  return TimeSlot(time: time, isAvailable: isAvailable);
+});
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -105,7 +117,9 @@ class _HomePageState extends State<HomePage> {
           _displayedCourts.sort((a, b) => b.priceRS.compareTo(a.priceRS));
           break;
         case 'Filtro (Avaliação)':
-          _displayedCourts = mockCourts.where((court) => court.rating >= 4.7).toList();
+          _displayedCourts = mockCourts
+              .where((court) => court.rating >= 4.7)
+              .toList();
           break;
         default:
           _displayedCourts = List.from(mockCourts);
@@ -119,7 +133,9 @@ class _HomePageState extends State<HomePage> {
         _displayedCourts = List.from(mockCourts);
       } else {
         _displayedCourts = mockCourts
-            .where((court) => court.name.toLowerCase().contains(query.toLowerCase()))
+            .where(
+              (court) => court.name.toLowerCase().contains(query.toLowerCase()),
+            )
             .toList();
       }
     });
@@ -128,11 +144,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(logoAsset, height: 40,
-          errorBuilder: (context, error, stackTrace) =>
-              const Text('LOGO AQUI', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold))),
-      ),
+      appBar: AppBar(title: Center(child: Image.asset(logoAsset, height: 100))),
       body: Column(
         children: [
           Padding(
@@ -150,7 +162,10 @@ class _HomePageState extends State<HomePage> {
                     decoration: const InputDecoration(
                       hintText: 'Buscar por nome da quadra...',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                     ),
                   ),
                 ),
@@ -159,9 +174,15 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildFilterButton('Proximidade', Icons.my_location),
-                    _buildFilterButton('Preço: Baixo-Alto', Icons.arrow_downward),
+                    _buildFilterButton(
+                      'Preço: Baixo-Alto',
+                      Icons.arrow_downward,
+                    ),
                     _buildFilterButton('Preço: Alto-Baixo', Icons.arrow_upward),
-                    _buildFilterButton('Filtro (Avaliação)', Icons.star_rate_rounded),
+                    _buildFilterButton(
+                      'Filtro (Avaliação)',
+                      Icons.star_rate_rounded,
+                    ),
                   ],
                 ),
               ],
@@ -172,7 +193,8 @@ class _HomePageState extends State<HomePage> {
               itemCount: _displayedCourts.length,
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               padding: const EdgeInsets.all(16),
-              itemBuilder: (context, index) => CourtCard(court: _displayedCourts[index]),
+              itemBuilder: (context, index) =>
+                  CourtCard(court: _displayedCourts[index]),
             ),
           ),
           Container(
@@ -204,18 +226,26 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           color: isSelected ? Colors.green.shade50 : Colors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: isSelected ? Colors.green : Colors.grey.shade300),
+          border: Border.all(
+            color: isSelected ? Colors.green : Colors.grey.shade300,
+          ),
         ),
         child: Column(
           children: [
-            Icon(icon, size: 20, color: isSelected ? Colors.green : Colors.grey.shade600),
+            Icon(
+              icon,
+              size: 20,
+              color: isSelected ? Colors.green : Colors.grey.shade600,
+            ),
             const SizedBox(height: 4),
             Text(
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 10,
-                color: isSelected ? Colors.green.shade800 : Colors.grey.shade700,
+                color: isSelected
+                    ? Colors.green.shade800
+                    : Colors.grey.shade700,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
               maxLines: 2,
@@ -261,7 +291,10 @@ class CourtCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey.shade200),
-                image: DecorationImage(image: NetworkImage(court.imageUrl), fit: BoxFit.cover),
+                image: DecorationImage(
+                  image: NetworkImage(court.imageUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(width: 16),
@@ -269,20 +302,48 @@ class CourtCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(court.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    court.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 12),
-                  Text(_formatCurrency(court.priceRS, 'R\$'), style: TextStyle(fontSize: 16, color: Colors.grey.shade700)),
-                  Text(_formatCurrency(court.priceUYU, 'UYU'), style: TextStyle(fontSize: 14, color: Colors.grey.shade500)),
+                  Text(
+                    _formatCurrency(court.priceRS, 'R\$'),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                  ),
+                  Text(
+                    _formatCurrency(court.priceUYU, 'UYU'),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
+                  ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
                       Icon(Icons.star, color: Colors.amber.shade600, size: 16),
                       const SizedBox(width: 4),
-                      Text(court.rating.toString(), style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                      Text(
+                        court.rating.toString(),
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 13,
+                        ),
+                      ),
                       const SizedBox(width: 12),
-                      Icon(Icons.my_location, color: Colors.grey.shade400, size: 16),
+                      Icon(
+                        Icons.my_location,
+                        color: Colors.grey.shade400,
+                        size: 16,
+                      ),
                       const SizedBox(width: 4),
-                      Text('${court.distance.toStringAsFixed(1)} km', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                      Text(
+                        '${court.distance.toStringAsFixed(1)} km',
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -313,7 +374,10 @@ class _DetailPageState extends State<DetailPage> {
     super.initState();
     _timeSlots = List.generate(
       mockTimeSlots.length,
-      (index) => TimeSlot(time: mockTimeSlots[index].time, isAvailable: mockTimeSlots[index].isAvailable),
+      (index) => TimeSlot(
+        time: mockTimeSlots[index].time,
+        isAvailable: mockTimeSlots[index].isAvailable,
+      ),
     );
   }
 
@@ -347,7 +411,8 @@ class _DetailPageState extends State<DetailPage> {
 
   void _onTimeSelected(int index) {
     setState(() {
-      if (_selectedTimeIndex != null) _timeSlots[_selectedTimeIndex!].isSelected = false;
+      if (_selectedTimeIndex != null)
+        _timeSlots[_selectedTimeIndex!].isSelected = false;
       _selectedTimeIndex = index;
       _timeSlots[index].isSelected = true;
     });
@@ -365,9 +430,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(logoAsset, height: 40,
-          errorBuilder: (context, error, stackTrace) =>
-              const Text('LOGO AQUI', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold))),
+        title: Center(child: Image.asset(logoAsset, height: 100)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.grey),
           onPressed: () => Navigator.pop(context),
@@ -388,19 +451,39 @@ class _DetailPageState extends State<DetailPage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.grey.shade200),
-                      image: DecorationImage(image: NetworkImage(widget.court.imageUrl), fit: BoxFit.cover),
+                      image: DecorationImage(
+                        image: NetworkImage(widget.court.imageUrl),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text(widget.court.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(
+                    widget.court.name,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(_formatCurrency(widget.court.priceRS, 'R\$'),
-                          style: TextStyle(fontSize: 20, color: Colors.grey.shade800, fontWeight: FontWeight.w500)),
-                      Text(_formatCurrency(widget.court.priceUYU, 'UYU'),
-                          style: TextStyle(fontSize: 16, color: Colors.grey.shade500)),
+                      Text(
+                        _formatCurrency(widget.court.priceRS, 'R\$'),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.grey.shade800,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        _formatCurrency(widget.court.priceUYU, 'UYU'),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -419,34 +502,56 @@ class _DetailPageState extends State<DetailPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Data desejada:', style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+                              Text(
+                                'Data desejada:',
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 14,
+                                ),
+                              ),
                               const SizedBox(height: 4),
                               Text(
-                                _selectedDate == null ? 'Selecione uma data...' : _formatDate(_selectedDate!),
-                                style: TextStyle(fontSize: 16, color: _selectedDate == null ? Colors.grey.shade500 : Colors.black),
+                                _selectedDate == null
+                                    ? 'Selecione uma data...'
+                                    : _formatDate(_selectedDate!),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: _selectedDate == null
+                                      ? Colors.grey.shade500
+                                      : Colors.black,
+                                ),
                               ),
                             ],
                           ),
-                          Icon(Icons.calendar_month, color: Colors.green.shade600),
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colors.green.shade600,
+                          ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
                   if (_selectedDate != null) ...[
-                    const Text('Horários disponíveis (Arraste para o lado)',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Horários disponíveis (Arraste para o lado)',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 16),
                     SizedBox(
                       height: 380,
                       child: GridView.builder(
                         padding: const EdgeInsets.all(4),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 6,
-                          crossAxisSpacing: 6,
-                          mainAxisSpacing: 6,
-                          childAspectRatio: 1.5,
-                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 6,
+                              crossAxisSpacing: 6,
+                              mainAxisSpacing: 6,
+                              childAspectRatio: 1.5,
+                            ),
                         itemCount: _timeSlots.length,
                         itemBuilder: (context, index) => TimeBox(
                           slot: _timeSlots[index],
@@ -467,7 +572,9 @@ class _DetailPageState extends State<DetailPage> {
                   ? () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Reserva solicitada em ${_formatDate(_selectedDate!)} às ${_timeSlots[_selectedTimeIndex!].time}'),
+                          content: Text(
+                            'Reserva solicitada em ${_formatDate(_selectedDate!)} às ${_timeSlots[_selectedTimeIndex!].time}',
+                          ),
                           backgroundColor: Colors.green.shade700,
                         ),
                       );
@@ -477,10 +584,18 @@ class _DetailPageState extends State<DetailPage> {
                 backgroundColor: Colors.green.shade600,
                 minimumSize: const Size(double.infinity, 50),
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: const Text('CONFIRMAR RESERVA',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+              child: const Text(
+                'CONFIRMAR RESERVA',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           Container(
@@ -529,16 +644,20 @@ class TimeBox extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: slot.isSelected ? Colors.green.shade700 : Colors.grey.shade300,
+            color: slot.isSelected
+                ? Colors.green.shade700
+                : Colors.grey.shade300,
             width: slot.isSelected ? 2 : 1,
           ),
         ),
-        child: Text(slot.time,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: slot.isSelected ? FontWeight.bold : FontWeight.normal,
-              color: textColor,
-            )),
+        child: Text(
+          slot.time,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: slot.isSelected ? FontWeight.bold : FontWeight.normal,
+            color: textColor,
+          ),
+        ),
       ),
     );
   }
