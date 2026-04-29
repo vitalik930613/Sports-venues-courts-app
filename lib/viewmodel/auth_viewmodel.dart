@@ -74,21 +74,24 @@ class AuthViewModel {
     required String birthDate,
     required String password,
   }) async {
+    final cleanPhone = phone.replaceAll(RegExp(r'\D'), '');
+
     final body = {
       'name': name,
       'email': email,
-      'phone': phone,
+      'phone': cleanPhone,
       'birth_date': birthDate,
       'password': password,
       'role': 'customer',
-      'photo': null,
     };
+
     try {
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(body),
       );
+
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
         final token = data['token'];
@@ -96,8 +99,15 @@ class AuthViewModel {
         await _saveAuthData(token, user);
         return true;
       } else {
-        final error = jsonDecode(response.body);
-        throw Exception(error['error'] ?? 'Erro ao criar conta');
+        String errorMsg;
+        try {
+          final error = jsonDecode(response.body);
+          errorMsg = error['error'] ?? 'Erro ao criar conta';
+        } catch (_) {
+          errorMsg =
+              'Servidor retornou resposta inválida. Status: ${response.statusCode}';
+        }
+        throw Exception(errorMsg);
       }
     } catch (e) {
       throw Exception(e.toString().replaceFirst('Exception: ', ''));
