@@ -72,7 +72,10 @@ class _CourtsPageState extends State<CourtsPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => CourtDetailPage(court: court),
+                        builder: (_) => CourtDetailPage(
+                          court: court,
+                          establishment: widget.establishment,
+                        ),
                       ),
                     );
                   },

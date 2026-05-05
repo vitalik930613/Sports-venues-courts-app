@@ -3,55 +3,52 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapPage extends StatelessWidget {
-  const MapPage({super.key});
+  final double latitude;
+  final double longitude;
+  final String name;
+
+  const MapPage({
+    super.key,
+    required this.latitude,
+    required this.longitude,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Localização exemplo da quadra
-    final LatLng quadraLocation = LatLng(-34.9011, -56.1645);
+    final LatLng location = LatLng(latitude, longitude);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0D1117),
       appBar: AppBar(
-        title: const Text("Mapa da Quadra"),
+        title: Text(name),
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
       body: Column(
         children: [
           Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(20),
-              ),
-              child: FlutterMap(
-                options: MapOptions(
-                  initialCenter: quadraLocation,
-                  initialZoom: 15,
+            child: FlutterMap(
+              options: MapOptions(initialCenter: location, initialZoom: 15),
+              children: [
+                TileLayer(
+                  urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  userAgentPackageName: "com.example.app",
                 ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    userAgentPackageName: "com.example.app",
-                  ),
-
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: quadraLocation,
-                        width: 80,
-                        height: 80,
-                        child: const Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                          size: 45,
-                        ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: location,
+                      width: 80,
+                      height: 80,
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                        size: 45,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
 
@@ -60,9 +57,7 @@ class MapPage extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,10 +73,7 @@ class MapPage extends StatelessWidget {
                 const SizedBox(height: 8),
                 const Text(
                   "Montevideo - Uruguay",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 15),
                 ),
                 const SizedBox(height: 15),
                 SizedBox(

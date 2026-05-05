@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/court.dart';
 import 'package:mobile/model/court_schedule.dart';
+import 'package:mobile/model/establishment.dart';
 import 'package:mobile/utils/image_utils.dart';
+import 'package:mobile/view/map_page.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/viewmodel/court_schedule_viewmodel.dart';
 import 'package:mobile/viewmodel/booking_viewmodel.dart';
 
 class CourtDetailPage extends StatefulWidget {
   final Court court;
-  const CourtDetailPage({super.key, required this.court});
+  final Establishment establishment;
+
+  const CourtDetailPage({
+    super.key,
+    required this.court,
+    required this.establishment,
+  });
 
   @override
   State<CourtDetailPage> createState() => _CourtDetailPageState();
@@ -179,6 +187,19 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
     }
   }
 
+  void _openMap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MapPage(
+          latitude: widget.establishment.latitude,
+          longitude: widget.establishment.longitude,
+          name: widget.establishment.name,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -254,6 +275,16 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                     Text(
                       'Funcionamento: ${_schedule!.openingTime} - ${_schedule!.closingTime}',
                       style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: _openMap,
+                      icon: const Icon(Icons.map),
+                      label: const Text('Ver localização no mapa'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
                     ),
                     const SizedBox(height: 24),
                     GestureDetector(
