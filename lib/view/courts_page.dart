@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/establishment.dart';
 import 'package:mobile/model/court.dart';
+import 'package:mobile/utils/image_utils.dart';
 import 'package:mobile/view/court_detail_page.dart';
 import 'package:mobile/viewmodel/court_viewmodel.dart';
 
@@ -115,7 +116,12 @@ class _CourtCard extends StatelessWidget {
                     : null,
               ),
               child: court.photo == null
-                  ? Icon(_sportIcon(court.sport), size: 40)
+                  ? Image.asset(
+                      getDefaultSportImage(court.sport),
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    )
                   : null,
             ),
             const SizedBox(width: 16),

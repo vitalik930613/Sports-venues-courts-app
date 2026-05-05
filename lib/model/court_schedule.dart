@@ -18,14 +18,24 @@ class CourtSchedule {
   });
 
   factory CourtSchedule.fromJson(Map<String, dynamic> json) {
+    final priceBrl = json['price_brl'];
+    final priceUyu = json['price_uyu'];
+
+    final double parsedPriceBrl = (priceBrl is num)
+        ? priceBrl.toDouble()
+        : double.parse(priceBrl as String);
+    final double parsedPriceUyu = (priceUyu is num)
+        ? priceUyu.toDouble()
+        : double.parse(priceUyu as String);
+
     return CourtSchedule(
       id: json['id'] as int,
       courtId: json['court_id'] as int,
       openingTime: json['opening_time'] as String,
       closingTime: json['closing_time'] as String,
       gameDuration: json['game_duration'] as int,
-      priceBrl: (json['price_brl'] as num).toDouble(),
-      priceUyu: (json['price_uyu'] as num).toDouble(),
+      priceBrl: parsedPriceBrl,
+      priceUyu: parsedPriceUyu,
     );
   }
 

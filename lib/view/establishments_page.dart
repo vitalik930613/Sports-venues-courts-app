@@ -1,4 +1,3 @@
-// lib/view/establishments_page.dart
 import 'package:flutter/material.dart';
 import 'package:mobile/view/courts_page.dart';
 import 'package:mobile/viewmodel/establishment_viewmodel.dart';

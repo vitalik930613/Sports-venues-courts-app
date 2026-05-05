@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/court.dart';
 import 'package:mobile/model/court_schedule.dart';
+import 'package:mobile/utils/image_utils.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/viewmodel/court_schedule_viewmodel.dart';
 import 'package:mobile/viewmodel/booking_viewmodel.dart';
@@ -33,12 +34,10 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
   Future<void> _loadSchedule() async {
     setState(() => _loadingSchedule = true);
     try {
-      final schedule = await _scheduleVM.fetchScheduleByCourtId(
-        widget.court.id,
-      );
-      if (schedule != null) {
+      final data = await _scheduleVM.fetchScheduleByCourtId(widget.court.id);
+      if (data != null) {
         setState(() {
-          _schedule = schedule;
+          _schedule = data;
           _loadingSchedule = false;
         });
       } else {
@@ -49,9 +48,10 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
       }
     } catch (e) {
       setState(() {
-        _error = e.toString();
+        _error = 'Erro ao carregar horário: ${e.toString()}';
         _loadingSchedule = false;
       });
+      print('Erro ao buscar schedule: $e');
     }
   }
 
@@ -212,7 +212,12 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                           : null,
                     ),
                     child: widget.court.photo == null
-                        ? Icon(_sportIcon(widget.court.sport), size: 80)
+                        ? Image.asset(
+                            getDefaultSportImage(widget.court.sport),
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                          )
                         : null,
                   ),
                   const SizedBox(height: 16),
