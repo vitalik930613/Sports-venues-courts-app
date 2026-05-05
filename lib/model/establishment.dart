@@ -18,11 +18,21 @@ class Establishment {
   });
 
   factory Establishment.fromJson(Map<String, dynamic> json) {
+    final lat = json['latitude'];
+    final lng = json['longitude'];
+
+    final double latitude = (lat is num)
+        ? lat.toDouble()
+        : double.parse(lat as String);
+    final double longitude = (lng is num)
+        ? lng.toDouble()
+        : double.parse(lng as String);
+
     return Establishment(
       id: json['id'] as int,
       name: json['name'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
+      latitude: latitude,
+      longitude: longitude,
       ownerId: json['owner_id'] as int,
       workingDays: (json['working_days'] as List<dynamic>)
           .map((e) => e as int)
@@ -30,7 +40,6 @@ class Establishment {
       photo: json['photo'] as String?,
     );
   }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
