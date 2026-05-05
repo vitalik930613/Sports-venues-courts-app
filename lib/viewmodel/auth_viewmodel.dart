@@ -1,8 +1,8 @@
+// lib/viewmodel/auth_viewmodel.dart (modificado)
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../config/api_config.dart';
 import '../model/user.dart';
+import '../services/api_client.dart';
 
 class AuthViewModel {
   static final AuthViewModel _instance = AuthViewModel._internal();
@@ -26,6 +26,7 @@ class AuthViewModel {
     if (token != null && userJson != null) {
       _token = token;
       _currentUser = User.fromJson(jsonDecode(userJson));
+      ApiClient().setToken(token);
     }
   }
 
@@ -35,6 +36,7 @@ class AuthViewModel {
     await prefs.setString('user_data', jsonEncode(user.toJson()));
     _token = token;
     _currentUser = user;
+    ApiClient().setToken(token);
   }
 
   Future<void> logout() async {
@@ -43,25 +45,19 @@ class AuthViewModel {
     await prefs.remove('user_data');
     _token = null;
     _currentUser = null;
+    ApiClient().setToken('');
   }
 
   Future<bool> login(String email, String password) async {
     try {
-      final response = await http.post(
-        Uri.parse('${ApiConfig.baseUrl}/auth/login-user'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'password': password}),
-      );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final token = data['token'];
-        final user = User.fromJson(data['user']);
-        await _saveAuthData(token, user);
-        return true;
-      } else {
-        final error = jsonDecode(response.body);
-        throw Exception(error['error'] ?? 'Erro ao fazer login');
-      }
+      final response = await ApiClient().post('/auth/login-user', {
+        'email': email,
+        'password': password,
+      });
+      final token = response['token'];
+      final user = User.fromJson(response['user']);
+      await _saveAuthData(token, user);
+      return true;
     } catch (e) {
       throw Exception(e.toString().replaceFirst('Exception: ', ''));
     }
@@ -74,31 +70,23 @@ class AuthViewModel {
     required String birthDate,
     required String password,
   }) async {
+    final cleanPhone = phone.replaceAll(RegExp(r'\D'), '');
+
     final body = {
       'name': name,
       'email': email,
-      'phone': phone,
+      'phone': cleanPhone,
       'birth_date': birthDate,
       'password': password,
       'role': 'customer',
-      'photo': null,
     };
+
     try {
-      final response = await http.post(
-        Uri.parse('${ApiConfig.baseUrl}/auth/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-      if (response.statusCode == 201) {
-        final data = jsonDecode(response.body);
-        final token = data['token'];
-        final user = User.fromJson(data['user']);
-        await _saveAuthData(token, user);
-        return true;
-      } else {
-        final error = jsonDecode(response.body);
-        throw Exception(error['error'] ?? 'Erro ao criar conta');
-      }
+      final response = await ApiClient().post('/auth/register', body);
+      final token = response['token'];
+      final user = User.fromJson(response['user']);
+      await _saveAuthData(token, user);
+      return true;
     } catch (e) {
       throw Exception(e.toString().replaceFirst('Exception: ', ''));
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/view/create_account_page.dart';
 import 'package:mobile/view/forget_password_page.dart';
-import 'package:mobile/view/home_page.dart';
+import 'package:mobile/view/establishments_page.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
         if (success && mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const HomePage()),
+            MaterialPageRoute(builder: (_) => const EstablishmentsPage()),
           );
         }
       } catch (e) {
