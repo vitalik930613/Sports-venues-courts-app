@@ -151,19 +151,6 @@ class _CourtCard extends StatelessWidget {
     );
   }
 
-  IconData _sportIcon(Sport sport) {
-    switch (sport) {
-      case Sport.soccer:
-        return Icons.sports_soccer;
-      case Sport.futsal:
-        return Icons.sports_soccer;
-      case Sport.padel:
-        return Icons.sports_tennis;
-      case Sport.tennis:
-        return Icons.sports_tennis;
-    }
-  }
-
   String _sportName(Sport sport) {
     switch (sport) {
       case Sport.soccer:

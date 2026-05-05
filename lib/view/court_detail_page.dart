@@ -76,7 +76,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
     final slots = <TimeSlot>[];
     final opening = _parseTime(_schedule!.openingTime);
     final closing = _parseTime(_schedule!.closingTime);
-    final duration = _schedule!.gameDuration; // em minutos
+    final duration = _schedule!.gameDuration;
 
     DateTime current = DateTime(
       date.year,
@@ -101,7 +101,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         TimeSlot(
           startTime: start,
           endTime: end,
-          isAvailable: true, // será verificado depois
+          isAvailable: true,
           isSelected: false,
         ),
       );
@@ -109,7 +109,6 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
     }
 
     _timeSlots = slots;
-    // Opcional: verificar disponibilidade em lote (simplificado, faremos na reserva)
   }
 
   TimeOfDay _parseTime(String timeStr) {
@@ -138,9 +137,8 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
     final slot = _timeSlots[_selectedSlotIndex!];
     final userId = AuthViewModel.instance.currentUser!.id;
 
-    setState(() => _loadingSchedule = true); // reuso para loading
+    setState(() => _loadingSchedule = true);
     try {
-      // Verificar disponibilidade novamente
       final available = await _bookingVM.checkAvailability(
         courtId: widget.court.id,
         startTime: slot.startTime,
@@ -150,7 +148,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Horário não está mais disponível')),
         );
-        _generateTimeSlots(_selectedDate!); // recarregar slots
+        _generateTimeSlots(_selectedDate!);
         setState(() => _loadingSchedule = false);
         return;
       }
@@ -346,19 +344,6 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
               ),
             ),
     );
-  }
-
-  IconData _sportIcon(Sport sport) {
-    switch (sport) {
-      case Sport.soccer:
-        return Icons.sports_soccer;
-      case Sport.futsal:
-        return Icons.sports_soccer;
-      case Sport.padel:
-        return Icons.sports_tennis;
-      case Sport.tennis:
-        return Icons.sports_tennis;
-    }
   }
 
   String _sportName(Sport sport) {
