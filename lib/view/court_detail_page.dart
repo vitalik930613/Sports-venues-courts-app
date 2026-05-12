@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/court.dart';
+import 'package:mobile/model/court_booking.dart';
 import 'package:mobile/model/court_schedule.dart';
 import 'package:mobile/model/establishment.dart';
 import 'package:mobile/utils/image_utils.dart';
@@ -32,6 +33,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
   DateTime? _selectedDate;
   int? _selectedSlotIndex;
   List<TimeSlot> _timeSlots = [];
+  List<CourtBooking> _bookingsOnSelectedDate = [];
 
   @override
   void initState() {
@@ -59,7 +61,6 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         _error = 'Erro ao carregar horário: ${e.toString()}';
         _loadingSchedule = false;
       });
-      print('Erro ao buscar schedule: $e');
     }
   }
 
@@ -74,7 +75,24 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
       setState(() {
         _selectedDate = picked;
         _selectedSlotIndex = null;
-        _generateTimeSlots(picked);
+      });
+      await _loadBookingsForDate(picked);
+      _generateTimeSlots(picked);
+    }
+  }
+
+  Future<void> _loadBookingsForDate(DateTime date) async {
+    try {
+      final bookings = await _bookingVM.fetchBookingsByCourtAndDate(
+        widget.court.id,
+        date,
+      );
+      setState(() {
+        _bookingsOnSelectedDate = bookings;
+      });
+    } catch (e) {
+      setState(() {
+        _bookingsOnSelectedDate = [];
       });
     }
   }
@@ -101,22 +119,37 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
       closing.minute,
     );
 
+    final now = DateTime.now();
+    final isToday =
+        date.year == now.year && date.month == now.month && date.day == now.day;
+
     while (current.add(Duration(minutes: duration)).isBefore(endOfDay) ||
         current.add(Duration(minutes: duration)).isAtSameMomentAs(endOfDay)) {
       final start = current;
       final end = current.add(Duration(minutes: duration));
+
+      bool isPast = isToday && start.isBefore(now);
+      bool isOccupied = _bookingsOnSelectedDate.any(
+        (booking) =>
+            (booking.startTime.isBefore(end) && booking.endTime.isAfter(start)),
+      );
+
+      bool isAvailable = !isPast && !isOccupied;
+
       slots.add(
         TimeSlot(
           startTime: start,
           endTime: end,
-          isAvailable: true,
+          isAvailable: isAvailable,
           isSelected: false,
         ),
       );
       current = end;
     }
 
-    _timeSlots = slots;
+    setState(() {
+      _timeSlots = slots;
+    });
   }
 
   TimeOfDay _parseTime(String timeStr) {
@@ -156,6 +189,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Horário não está mais disponível')),
         );
+        await _loadBookingsForDate(_selectedDate!);
         _generateTimeSlots(_selectedDate!);
         setState(() => _loadingSchedule = false);
         return;
@@ -174,7 +208,9 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.pop(context);
+      await _loadBookingsForDate(_selectedDate!);
+      _generateTimeSlots(_selectedDate!);
+      setState(() => _selectedSlotIndex = null);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

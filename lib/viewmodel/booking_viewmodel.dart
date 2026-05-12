@@ -59,4 +59,25 @@ class BookingViewModel {
     }
     return {};
   }
+
+  Future<List<CourtBooking>> fetchBookingsByCourtAndDate(
+    int courtId,
+    DateTime date,
+  ) async {
+    final data = await _api.get('/court-bookings/court/$courtId');
+    if (data is List) {
+      final bookings = data.map((json) => CourtBooking.fromJson(json)).toList();
+      final startOfDay = DateTime(date.year, date.month, date.day);
+      final endOfDay = startOfDay.add(const Duration(days: 1));
+      return bookings
+          .where(
+            (b) =>
+                b.status == BookingStatus.confirmed &&
+                b.startTime.isAfter(startOfDay) &&
+                b.startTime.isBefore(endOfDay),
+          )
+          .toList();
+    }
+    return [];
+  }
 }
