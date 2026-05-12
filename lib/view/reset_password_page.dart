@@ -87,7 +87,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     controller: codeController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      labelText: 'Código de 4 dígitos',
+                      labelText: 'Código de 6 dígitos',
                       prefixIcon: const Icon(Icons.pin),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -97,8 +97,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       if (value == null || value.isEmpty) {
                         return 'Informe o código';
                       }
-                      if (value.length != 4) {
-                        return 'O código deve ter 4 dígitos';
+                      if (value.length != 6) {
+                        return 'O código deve ter 6 dígitos';
                       }
                       return null;
                     },
