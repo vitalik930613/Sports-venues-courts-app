@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/user.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/login_page.dart';
-import 'package:mobile/services/api_client.dart';
+import 'package:mobile/view/change_password_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,107 +18,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     user = AuthViewModel.instance.currentUser;
-  }
-
-  void _showChangePasswordDialog(BuildContext context) {
-    final currentPasswordController = TextEditingController();
-    final newPasswordController = TextEditingController();
-    final confirmController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Alterar senha'),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: currentPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Senha atual',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (v) =>
-                    v == null || v.isEmpty ? 'Digite a senha atual' : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: newPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Nova senha',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (v) {
-                  if (v == null || v.isEmpty) return 'Digite a nova senha';
-                  if (v.length < 8) return 'Mínimo 8 caracteres';
-                  if (!v.contains(RegExp(r'[A-Z]')))
-                    return 'Uma letra maiúscula';
-                  if (!v.contains(RegExp(r'[a-z]')))
-                    return 'Uma letra minúscula';
-                  if (!v.contains(RegExp(r'[0-9]'))) return 'Um número';
-                  if (!v.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')))
-                    return 'Um caractere especial';
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: confirmController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Confirmar nova senha',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (v) => v != newPasswordController.text
-                    ? 'As senhas não coincidem'
-                    : null,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (formKey.currentState!.validate()) {
-                Navigator.pop(dialogContext);
-                try {
-                  await ApiClient().post('/auth/change-password', {
-                    'currentPassword': currentPasswordController.text,
-                    'newPassword': newPasswordController.text,
-                  });
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Senha alterada com sucesso!'),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(e.toString()),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
-              }
-            },
-            child: const Text('Alterar'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -139,15 +38,14 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
+            Image.asset('assets/images/cancha_logo.png', height: 80),
+            const SizedBox(height: 20),
             CircleAvatar(
               radius: 60,
               backgroundImage: user!.photo != null && user!.photo!.isNotEmpty
                   ? NetworkImage(user!.photo!)
                   : const AssetImage('assets/images/default_perfil.jpg')
                         as ImageProvider,
-              child: user!.photo == null
-                  ? const Icon(Icons.person, size: 60, color: Colors.white)
-                  : null,
             ),
             const SizedBox(height: 24),
             Text(
@@ -159,6 +57,22 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 8),
             Text(user!.phone, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 32),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ChangePasswordPage()),
+                );
+              },
+              icon: const Icon(Icons.lock_reset),
+              label: const Text('Alterar Senha'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 48),
+              ),
+            ),
+            const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () async {
                 await AuthViewModel.instance.logout();
@@ -172,18 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
               icon: const Icon(Icons.exit_to_app),
               label: const Text('Sair'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 48),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () => _showChangePasswordDialog(context),
-              icon: const Icon(Icons.lock_reset),
-              label: const Text('Alterar Senha'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
+                backgroundColor: Colors.red, // ou Colors.green se preferir
                 foregroundColor: Colors.white,
                 minimumSize: const Size(double.infinity, 48),
               ),
