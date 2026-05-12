@@ -39,4 +39,24 @@ class BookingViewModel {
     final data = await _api.post('/court-bookings/check-availability', body);
     return data['available'] ?? false;
   }
+
+  Future<List<CourtBooking>> fetchUserBookings() async {
+    final data = await _api.get('/court-bookings/user');
+    if (data is List) {
+      return data.map((json) => CourtBooking.fromJson(json)).toList();
+    }
+    return [];
+  }
+
+  Future<void> cancelBooking(int bookingId) async {
+    await _api.patch('/court-bookings/$bookingId', {'status': 'canceled'});
+  }
+
+  Future<Map<int, String>> fetchCourtsMap() async {
+    final data = await _api.get('/courts');
+    if (data is List) {
+      return {for (var c in data) c['id'] as int: c['name'] as String};
+    }
+    return {};
+  }
 }
