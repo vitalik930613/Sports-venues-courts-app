@@ -75,24 +75,6 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
                 );
               },
             ),
-      bottomNavigationBar: _buildBottomNav(),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      height: 60,
-      color: Colors.green.shade600,
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.home, color: Colors.white, size: 30),
-          SizedBox(width: 40),
-          Icon(Icons.calendar_today, color: Colors.white54, size: 28),
-          SizedBox(width: 40),
-          Icon(Icons.person, color: Colors.white54, size: 28),
-        ],
-      ),
     );
   }
 }
