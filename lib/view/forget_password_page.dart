@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:mobile/view/reset_password_page.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});
@@ -12,21 +14,32 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final TextEditingController emailController = TextEditingController();
   bool isLoading = false;
 
-  void sendResetLink() {
-    if (_formKey.currentState!.validate()) {
-      setState(() => isLoading = true);
+  Future<void> sendResetCode() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() => isLoading = false);
-
+    setState(() => isLoading = true);
+    try {
+      await AuthViewModel.instance.forgotPassword(emailController.text.trim());
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Link de recuperação enviado para o seu e-mail'),
+          const SnackBar(content: Text('Código enviado para o e-mail!')),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                ResetPasswordPage(email: emailController.text.trim()),
           ),
         );
-
-        Navigator.pop(context);
-      });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => isLoading = false);
     }
   }
 
@@ -58,7 +71,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     const Text(
                       'Recuperar senha',
                       style: TextStyle(
@@ -92,7 +104,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: isLoading ? null : sendResetLink,
+                        onPressed: isLoading ? null : sendResetCode,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
@@ -104,7 +116,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                 color: Colors.white,
                               )
                             : const Text(
-                                'ENVIAR LINK',
+                                'ENVIAR CÓDIGO',
                                 style: TextStyle(color: Colors.white),
                               ),
                       ),

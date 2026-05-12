@@ -91,4 +91,28 @@ class AuthViewModel {
       throw Exception(e.toString().replaceFirst('Exception: ', ''));
     }
   }
+
+  Future<void> forgotPassword(String email) async {
+    try {
+      await ApiClient().post('/auth/forgot-password', {'email': email});
+    } catch (e) {
+      throw Exception(e.toString().replaceFirst('Exception: ', ''));
+    }
+  }
+
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
+    try {
+      await ApiClient().post('/auth/reset-password', {
+        'email': email,
+        'code': code,
+        'newPassword': newPassword,
+      });
+    } catch (e) {
+      throw Exception(e.toString().replaceFirst('Exception: ', ''));
+    }
+  }
 }
