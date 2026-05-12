@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/court_booking.dart';
 import '../viewmodel/booking_viewmodel.dart';
-import '../viewmodel/court_viewmodel.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -12,7 +11,6 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   final BookingViewModel _bookingVM = BookingViewModel();
-  final CourtViewModel _courtVM = CourtViewModel();
   List<CourtBooking> _bookings = [];
   Map<int, String> _courtNames = {};
   bool _isLoading = true;
@@ -108,7 +106,9 @@ class _CalendarPageState extends State<CalendarPage> {
           : _error.isNotEmpty
           ? Center(child: Text('Erro: $_error'))
           : _bookings.isEmpty
-          ? const Center(child: Text('Nenhuma reserva encontrada'))
+          ? const Center(
+              child: Text('Nenhuma reserva encontrada. BORA JOGAR!!!'),
+            )
           : ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: _bookings.length,

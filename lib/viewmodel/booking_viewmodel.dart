@@ -41,11 +41,18 @@ class BookingViewModel {
   }
 
   Future<List<CourtBooking>> fetchUserBookings() async {
-    final data = await _api.get('/court-bookings/user');
-    if (data is List) {
-      return data.map((json) => CourtBooking.fromJson(json)).toList();
+    try {
+      final data = await _api.get('/court-bookings/user');
+      if (data is List) {
+        return data.map((json) => CourtBooking.fromJson(json)).toList();
+      }
+      return [];
+    } catch (e) {
+      if (e.toString().contains('No court bookings found')) {
+        return [];
+      }
+      rethrow;
     }
-    return [];
   }
 
   Future<void> cancelBooking(int bookingId) async {
