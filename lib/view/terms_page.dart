@@ -7,8 +7,12 @@ class TermsPage extends StatelessWidget {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Termos de Uso e Privacidade'),
-        backgroundColor: Colors.green,
+        title: const Text(
+          'Termos de Uso e Privacidade', 
+          style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
