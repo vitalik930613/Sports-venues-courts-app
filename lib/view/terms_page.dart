@@ -135,7 +135,7 @@ Esta Política de Privacidade poderá ser atualizada periodicamente. As alteraç
 
 Para dúvidas relacionadas aos Termos de Uso ou à Política de Privacidade, entre em contato através do e-mail:
 
-contato@seuapp.com
+cancha@gmail.com
 ''', 
 style: TextStyle(fontSize: 16, height: 1.5),
           )
