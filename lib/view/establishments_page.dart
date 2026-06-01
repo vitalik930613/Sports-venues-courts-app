@@ -59,7 +59,7 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
           : ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: _establishments.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final est = _establishments[index];
                 return _EstablishmentCard(

@@ -131,14 +131,18 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     validator: (v) {
                       if (v == null || v.isEmpty) return 'Digite a nova senha';
                       if (v.length < 8) return 'Mínimo 8 caracteres';
-                      if (!v.contains(RegExp(r'[A-Z]')))
+                      if (!v.contains(RegExp(r'[A-Z]'))) {
                         return 'Pelo menos 1 letra maiúscula';
-                      if (!v.contains(RegExp(r'[a-z]')))
+                      }
+                      if (!v.contains(RegExp(r'[a-z]'))) {
                         return 'Pelo menos 1 letra minúscula';
-                      if (!v.contains(RegExp(r'[0-9]')))
+                      }
+                      if (!v.contains(RegExp(r'[0-9]'))) {
                         return 'Pelo menos 1 número';
-                      if (!v.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')))
+                      }
+                      if (!v.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
                         return 'Pelo menos 1 caractere especial';
+                      }
                       return null;
                     },
                   ),
@@ -165,8 +169,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     ),
                     validator: (v) {
                       if (v == null || v.isEmpty) return 'Confirme a senha';
-                      if (v != newPasswordController.text)
+                      if (v != newPasswordController.text) {
                         return 'As senhas não coincidem';
+                      }
                       return null;
                     },
                   ),

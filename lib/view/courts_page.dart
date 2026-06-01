@@ -63,7 +63,7 @@ class _CourtsPageState extends State<CourtsPage> {
           : ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: _courts.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final court = _courts[index];
                 return _CourtCard(

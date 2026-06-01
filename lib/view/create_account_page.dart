@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:mobile/view/terms_page.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -21,7 +22,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   bool isLoading = false;
   bool obscurePassword = true;
+  bool termConditions = false;
+
+
   void register() async {
+      if (!termConditions){
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Você precisa aceitar os Termos de Uso e Política de Privacidade'),
+              backgroundColor: Colors.red
+              ),
+           );
+           return;
+        }
     if (_formKey.currentState!.validate() && selectedBirthDate != null) {
       setState(() => isLoading = true);
       try {
@@ -34,6 +47,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           birthDate: birthDateStr,
           password: passwordController.text,
         );
+      
         if (success && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Conta criada com sucesso!')),
@@ -263,6 +277,34 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         }
                         return null;
                       },
+                    ),
+
+                    Row(children: [
+                      Checkbox(value: termConditions, 
+                      onChanged: (value) {
+                        setState(() {
+                          termConditions = value ?? false;
+                        });
+                       },
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => TermsPage
+                              ())
+                              );
+                         },
+                         child: const Text(
+                          'Li e aceito os Termos de Uso e Politica de Privacidade',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                         ),
+                        )
+                       )
+                     ],
                     ),
 
                     const SizedBox(height: 20),
