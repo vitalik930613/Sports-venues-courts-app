@@ -115,4 +115,15 @@ class AuthViewModel {
       throw Exception(e.toString().replaceFirst('Exception: ', ''));
     }
   }
+
+  Future<void> deleteAccount() async {
+    if (_currentUser == null) throw Exception('Usuário não logado');
+
+    try {
+      await ApiClient().delete('/users/${_currentUser!.id}');
+      await logout();
+    } catch (e) {
+      throw Exception(e.toString().replaceFirst('Exception: ', ''));
+    }
+  }
 }
