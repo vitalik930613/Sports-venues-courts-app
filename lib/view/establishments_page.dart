@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/view/courts_page.dart';
+import 'package:mobile/view/wearable/wearable_screen.dart';
 import 'package:mobile/viewmodel/establishment_viewmodel.dart';
 import 'package:mobile/model/establishment.dart';
 
@@ -75,6 +76,16 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const WearableScreen()),
+          );
+        },
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.watch, color: Colors.white),
+      ),
     );
   }
 }

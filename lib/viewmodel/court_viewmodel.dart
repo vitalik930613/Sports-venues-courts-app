@@ -16,4 +16,12 @@ class CourtViewModel {
     final data = await _api.get('/courts/$id');
     return Court.fromJson(data);
   }
+
+  Future<List<Court>> fetchAllCourts() async {
+    final data = await _api.get('/courts');
+    if (data is List) {
+      return data.map((json) => Court.fromJson(json)).toList();
+    }
+    return [];
+  }
 }
