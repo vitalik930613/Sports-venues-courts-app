@@ -236,6 +236,14 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
     );
   }
 
+  String _formatTimeWithoutSeconds(String time) {
+    final parts = time.split(':');
+    if (parts.length >= 2) {
+      return '${parts[0]}:${parts[1]}';
+    }
+    return time;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -309,7 +317,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Funcionamento: ${_schedule!.openingTime} - ${_schedule!.closingTime}',
+                      'Funcionamento: ${_formatTimeWithoutSeconds(_schedule!.openingTime)} - ${_formatTimeWithoutSeconds(_schedule!.closingTime)}',
                       style: const TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 16),
@@ -348,7 +356,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                                 Text(
                                   _selectedDate == null
                                       ? 'Selecione uma data'
-                                      : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                                      : '${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.year}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ],

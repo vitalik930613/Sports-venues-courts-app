@@ -87,7 +87,8 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  String _formatDate(DateTime dt) => '${dt.day}/${dt.month}/${dt.year}';
+  String _formatDate(DateTime dt) =>
+      '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
   String _formatTime(DateTime dt) =>
       '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
 
