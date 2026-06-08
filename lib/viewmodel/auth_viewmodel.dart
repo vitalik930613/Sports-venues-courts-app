@@ -123,7 +123,14 @@ class AuthViewModel {
       await ApiClient().delete('/users/${_currentUser!.id}');
       await logout();
     } catch (e) {
-      throw Exception(e.toString().replaceFirst('Exception: ', ''));
+      String originalMsg = e.toString().replaceFirst('Exception: ', '');
+      if (originalMsg.contains('future reservations') ||
+          originalMsg.contains('You can\'t delete')) {
+        throw Exception(
+          'Não é possível excluir a conta pois você possui reservas futuras. Cancele-as primeiro.',
+        );
+      }
+      rethrow;
     }
   }
 }
