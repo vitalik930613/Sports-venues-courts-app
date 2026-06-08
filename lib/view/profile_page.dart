@@ -3,6 +3,7 @@ import 'package:mobile/model/user.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/login_page.dart';
 import 'package:mobile/view/change_password_page.dart';
+import 'package:mobile/view/themes_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -176,6 +177,24 @@ class _ProfilePageState extends State<ProfilePage> {
                 minimumSize: const Size(double.infinity, 48),
               ),
             ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ThemesPage()),
+                );
+              },
+              icon: const Icon(Icons.palette_outlined),
+              label: const Text('Temas'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF7B1FA2),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 48),
+              ),
+            ),
+
+
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _confirmDeleteAccount,
