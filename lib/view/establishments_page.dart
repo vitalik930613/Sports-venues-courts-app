@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/geocoding_helper.dart';
 import 'package:mobile/view/courts_page.dart';
 import 'package:mobile/view/wearable/wearable_screen.dart';
 import 'package:mobile/viewmodel/establishment_viewmodel.dart';
@@ -90,16 +91,43 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
   }
 }
 
-class _EstablishmentCard extends StatelessWidget {
+class _EstablishmentCard extends StatefulWidget {
   final Establishment establishment;
   final VoidCallback onTap;
 
   const _EstablishmentCard({required this.establishment, required this.onTap});
 
   @override
+  State<_EstablishmentCard> createState() => _EstablishmentCardState();
+}
+
+class _EstablishmentCardState extends State<_EstablishmentCard> {
+  String _address = '';
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAddress();
+  }
+
+  Future<void> _loadAddress() async {
+    final address = await GeocodingHelper.getAddress(
+      widget.establishment.latitude,
+      widget.establishment.longitude,
+    );
+    if (mounted) {
+      setState(() {
+        _address = address;
+        _loading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -115,14 +143,14 @@ class _EstablishmentCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(8),
-                image: establishment.photo != null
+                image: widget.establishment.photo != null
                     ? DecorationImage(
-                        image: NetworkImage(establishment.photo!),
+                        image: NetworkImage(widget.establishment.photo!),
                         fit: BoxFit.cover,
                       )
                     : null,
               ),
-              child: establishment.photo == null
+              child: widget.establishment.photo == null
                   ? const Icon(Icons.sports_soccer, size: 40)
                   : null,
             ),
@@ -132,7 +160,7 @@ class _EstablishmentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    establishment.name,
+                    widget.establishment.name,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -143,9 +171,13 @@ class _EstablishmentCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.location_on, size: 16),
                       const SizedBox(width: 4),
-                      Text(
-                        'Lat: ${establishment.latitude}, Lng: ${establishment.longitude}',
-                        style: const TextStyle(fontSize: 12),
+                      Expanded(
+                        child: Text(
+                          _loading ? 'Carregando endereço...' : _address,
+                          style: const TextStyle(fontSize: 12),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
