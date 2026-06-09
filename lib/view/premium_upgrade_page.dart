@@ -154,35 +154,123 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tornar-se Premium'),
+        title: const Text('Premium'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: Icon(Icons.star, size: 80, color: Colors.amber[700])),
-            const SizedBox(height: 20),
-            const Text(
-              'Desbloqueie funcionalidades exclusivas',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.amber.shade700, Colors.orange.shade800],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.star, size: 48, color: Colors.white),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'PLANOS PREMIUM',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'R\$ ',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        '19,90',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 4,
+                              color: Colors.black.withValues(alpha: 0.3),
+                              offset: const Offset(2, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          '/mês',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      'Cancele quando quiser',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 32),
 
-            _buildComparisonRow('Tema Padrão', true, false),
-            const Divider(),
-            _buildComparisonRow(
-              'Temas Premium (Meia-Noite, Campo, Arena, Pôr do Sol)',
-              false,
-              true,
+            const Text(
+              'Benefícios exclusivos',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const Divider(),
-            _buildComparisonRow('Suporte prioritário', false, true),
-            const Divider(),
-            _buildComparisonRow('Sem anúncios', false, true),
+            const SizedBox(height: 16),
+            _buildBenefitItem(
+              Icons.palette,
+              'Temas exclusivos',
+              'Meia-Noite, Campo, Arena, Pôr do Sol',
+            ),
+            const SizedBox(height: 12),
+            _buildBenefitItem(
+              Icons.support_agent,
+              'Suporte prioritário',
+              'Atendimento em até 3000h',
+            ),
+            const SizedBox(height: 12),
+            _buildBenefitItem(
+              Icons.emoji_events,
+              'Descontos especiais',
+              'Em eventos e parcerias',
+            ),
 
             const SizedBox(height: 40),
 
@@ -190,24 +278,21 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
               SizedBox(
                 width: double.infinity,
                 height: 54,
-                child: ElevatedButton(
+                child: ElevatedButton.icon(
                   onPressed: _isLoading ? null : _cancelSubscription,
+                  icon: const Icon(Icons.cancel_outlined),
+                  label: const Text('CANCELAR ASSINATURA'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red.shade700,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  child: _isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          'CANCELAR ASSINATURA',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -219,24 +304,21 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
               SizedBox(
                 width: double.infinity,
                 height: 54,
-                child: ElevatedButton(
+                child: ElevatedButton.icon(
                   onPressed: _isLoading ? null : _showPasswordDialog,
+                  icon: const Icon(Icons.rocket_launch),
+                  label: const Text('TORNAR-SE PREMIUM'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber[700],
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  child: _isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          'TORNAR-SE PREMIUM',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -251,24 +333,37 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
     );
   }
 
-  Widget _buildComparisonRow(String feature, bool free, bool premium) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Expanded(child: Text(feature, style: const TextStyle(fontSize: 16))),
-          const SizedBox(width: 16),
-          Icon(
-            free ? Icons.check_circle : Icons.close,
-            color: free ? Colors.green : Colors.grey,
+  Widget _buildBenefitItem(IconData icon, String title, String subtitle) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.amber.shade100,
+            borderRadius: BorderRadius.circular(12),
           ),
-          const SizedBox(width: 32),
-          Icon(
-            premium ? Icons.check_circle : Icons.close,
-            color: premium ? Colors.amber[700] : Colors.grey,
+          child: Icon(icon, color: Colors.amber.shade800, size: 24),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: const TextStyle(fontSize: 13, color: Colors.grey),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

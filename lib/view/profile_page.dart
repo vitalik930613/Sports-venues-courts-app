@@ -195,6 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final primary = Theme.of(context).colorScheme.primary;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
+    final isUserPremium = user?.isPremium ?? false;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -240,39 +241,51 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 16),
 
-            if (!(user?.isPremium ?? false))
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const PremiumUpgradePage(),
-                    ),
-                  ).then((_) => _refreshUser());
-                },
-                icon: const Icon(Icons.star),
-                label: const Text('Tornar-se Premium'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber[700],
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 48),
-                ),
-              ),
-
-            if (user?.isPremium == true)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
+            Visibility(
+              visible: !isUserPremium,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              child: Visibility(
+                visible: !isUserPremium,
                 child: ElevatedButton.icon(
-                  onPressed: _isLoading ? null : _cancelPremium,
-                  icon: const Icon(Icons.star_border),
-                  label: const Text('Cancelar Assinatura Premium'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const PremiumUpgradePage(),
+                      ),
+                    ).then((_) => _refreshUser());
+                  },
+                  icon: const Icon(Icons.star),
+                  label: const Text('Tornar-se Premium'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange.shade700,
+                    backgroundColor: Colors.amber[700],
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 48),
                   ),
                 ),
               ),
+            ),
+
+            Visibility(
+              visible: isUserPremium,
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              child: ElevatedButton.icon(
+                onPressed: _isLoading ? null : _cancelPremium,
+                icon: const Icon(Icons.star_border),
+                label: const Text('Cancelar Assinatura Premium'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange.shade700,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 48),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
 
             ElevatedButton.icon(
               onPressed: () {
