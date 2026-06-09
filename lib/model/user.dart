@@ -7,6 +7,7 @@ class User {
   final String phone;
   final DateTime birthDate;
   final UserRole role;
+  final bool isPremium;
   final DateTime? emailVerifiedAt;
   final String? photo;
 
@@ -17,6 +18,7 @@ class User {
     required this.phone,
     required this.birthDate,
     required this.role,
+    required this.isPremium,
     this.emailVerifiedAt,
     this.photo,
   });
@@ -29,6 +31,7 @@ class User {
       phone: json['phone'] as String,
       birthDate: DateTime.parse(json['birth_date'] as String),
       role: _roleFromString(json['role'] as String),
+      isPremium: json['is_premium'] as bool? ?? false,
       emailVerifiedAt: json['email_verified_at'] != null
           ? DateTime.parse(json['email_verified_at'] as String)
           : null,
@@ -44,6 +47,7 @@ class User {
       'phone': phone,
       'birth_date': birthDate.toIso8601String().split('T').first,
       'role': _roleToString(role),
+      'is_premium': isPremium,
       'email_verified_at': emailVerifiedAt?.toIso8601String(),
       'photo': photo,
     };

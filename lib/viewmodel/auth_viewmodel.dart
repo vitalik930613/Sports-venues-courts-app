@@ -133,4 +133,20 @@ class AuthViewModel {
       rethrow;
     }
   }
+
+  Future<void> upgradeToPremium() async {
+    if (_currentUser == null) throw Exception('Usuário não logado');
+
+    try {
+      final response = await ApiClient().patch('/auth/upgrade', {});
+
+      final updatedUser = User.fromJson(response['user']);
+
+      await _saveAuthData(_token!, updatedUser);
+    } catch (e) {
+      throw Exception(
+        'Erro ao tornar-se premium: ${e.toString().replaceFirst('Exception: ', '')}',
+      );
+    }
+  }
 }
