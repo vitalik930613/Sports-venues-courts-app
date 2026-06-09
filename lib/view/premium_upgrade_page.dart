@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/theme/theme_provider.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class PremiumUpgradePage extends StatefulWidget {
   const PremiumUpgradePage({super.key});
@@ -120,6 +122,8 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
     setState(() => _isLoading = true);
     try {
       await AuthViewModel.instance.cancelPremium();
+      final themeProvider = context.read<ThemeProvider>();
+      themeProvider.setTheme('default');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

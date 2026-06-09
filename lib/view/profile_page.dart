@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/user.dart';
+import 'package:mobile/theme/theme_provider.dart';
 import 'package:mobile/view/premium_upgrade_page.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/login_page.dart';
 import 'package:mobile/view/change_password_page.dart';
 import 'package:mobile/view/themes_page.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -160,6 +162,8 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() => _isLoading = true);
     try {
       await AuthViewModel.instance.cancelPremium();
+      final themeProvider = context.read<ThemeProvider>();
+      themeProvider.setTheme('default');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
