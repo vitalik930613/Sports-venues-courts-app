@@ -191,6 +191,16 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Widget _buildButtonRow(Widget leftButton, Widget rightButton) {
+    return Row(
+      children: [
+        Expanded(child: leftButton),
+        const SizedBox(width: 16),
+        Expanded(child: rightButton),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (user == null) {
@@ -200,6 +210,100 @@ class _ProfilePageState extends State<ProfilePage> {
     final primary = Theme.of(context).colorScheme.primary;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
     final isUserPremium = user?.isPremium ?? false;
+
+    final sideButtonStyle = ElevatedButton.styleFrom(
+      foregroundColor: Colors.white,
+      minimumSize: const Size(0, 48),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+    );
+
+    final changePasswordButton = ElevatedButton.icon(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ChangePasswordPage()),
+        );
+      },
+      icon: const Icon(Icons.lock_reset),
+      label: const Text('Alterar Senha'),
+      style: sideButtonStyle.copyWith(
+        backgroundColor: MaterialStatePropertyAll(primary),
+      ),
+    );
+
+    final themesButton = ElevatedButton.icon(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ThemesPage()),
+        );
+      },
+      icon: const Icon(Icons.palette_outlined),
+      label: const Text('Temas'),
+      style: sideButtonStyle.copyWith(
+        backgroundColor: const MaterialStatePropertyAll(Color(0xFF7B1FA2)),
+      ),
+    );
+
+    final deleteAccountButton = ElevatedButton.icon(
+      onPressed: _confirmDeleteAccount,
+      icon: const Icon(Icons.delete_forever),
+      label: const Text('Deletar Conta'),
+      style: sideButtonStyle.copyWith(
+        backgroundColor: const MaterialStatePropertyAll(Colors.red),
+      ),
+    );
+
+    final logoutButton = ElevatedButton.icon(
+      onPressed: () async {
+        await AuthViewModel.instance.logout();
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginPage()),
+          );
+        }
+      },
+      icon: const Icon(Icons.exit_to_app),
+      label: const Text('Sair'),
+      style: sideButtonStyle.copyWith(
+        backgroundColor: const MaterialStatePropertyAll(Colors.grey),
+      ),
+    );
+
+    final premiumButton = isUserPremium
+        ? ElevatedButton.icon(
+            onPressed: _isLoading ? null : _cancelPremium,
+            icon: const Icon(Icons.star_border),
+            label: const Text('Cancelar Assinatura Premium'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange.shade700,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(double.infinity, 48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          )
+        : ElevatedButton.icon(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PremiumUpgradePage()),
+              ).then((_) => _refreshUser());
+            },
+            icon: const Icon(Icons.star),
+            label: const Text('Tornar-se Premium'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber[700],
+              foregroundColor: Colors.white,
+              minimumSize: const Size(double.infinity, 48),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          );
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -227,118 +331,11 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 8),
             Text(user!.phone, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 32),
-
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ChangePasswordPage()),
-                );
-              },
-              icon: const Icon(Icons.lock_reset),
-              label: const Text('Alterar Senha'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 48),
-              ),
-            ),
+            _buildButtonRow(changePasswordButton, themesButton),
             const SizedBox(height: 16),
-
-            Visibility(
-              visible: !isUserPremium,
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              child: Visibility(
-                visible: !isUserPremium,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const PremiumUpgradePage(),
-                      ),
-                    ).then((_) => _refreshUser());
-                  },
-                  icon: const Icon(Icons.star),
-                  label: const Text('Tornar-se Premium'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber[700],
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 48),
-                  ),
-                ),
-              ),
-            ),
-
-            Visibility(
-              visible: isUserPremium,
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              child: ElevatedButton.icon(
-                onPressed: _isLoading ? null : _cancelPremium,
-                icon: const Icon(Icons.star_border),
-                label: const Text('Cancelar Assinatura Premium'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange.shade700,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 48),
-                ),
-              ),
-            ),
-
+            _buildButtonRow(deleteAccountButton, logoutButton),
             const SizedBox(height: 16),
-
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ThemesPage()),
-                );
-              },
-              icon: const Icon(Icons.palette_outlined),
-              label: const Text('Temas'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF7B1FA2),
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 48),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            ElevatedButton.icon(
-              onPressed: _confirmDeleteAccount,
-              icon: const Icon(Icons.delete_forever),
-              label: const Text('Deletar Conta'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade700,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 48),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            ElevatedButton.icon(
-              onPressed: () async {
-                await AuthViewModel.instance.logout();
-                if (mounted) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
-                  );
-                }
-              },
-              icon: const Icon(Icons.exit_to_app),
-              label: const Text('Sair'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 48),
-              ),
-            ),
+            premiumButton,
           ],
         ),
       ),
