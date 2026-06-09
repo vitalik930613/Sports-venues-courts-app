@@ -14,9 +14,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late final User? user;
+  late User? user;
   final TextEditingController _deleteConfirmController =
       TextEditingController();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -28,6 +29,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void dispose() {
     _deleteConfirmController.dispose();
     super.dispose();
+  }
+
+  void _refreshUser() {
+    setState(() {
+      user = AuthViewModel.instance.currentUser;
+    });
   }
 
   Future<void> _confirmDeleteAccount() async {
@@ -126,6 +133,60 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<void> _cancelPremium() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cancelar assinatura Premium'),
+        content: const Text(
+          'Tem certeza que deseja cancelar sua assinatura? Você perderá todos os benefícios exclusivos.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Não'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Sim, cancelar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() => _isLoading = true);
+    try {
+      await AuthViewModel.instance.cancelPremium();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Assinatura cancelada. Você agora é um usuário gratuito.',
+            ),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        _refreshUser();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erro: ${e.toString().replaceFirst('Exception: ', '')}',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (user == null) {
@@ -187,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     MaterialPageRoute(
                       builder: (_) => const PremiumUpgradePage(),
                     ),
-                  );
+                  ).then((_) => _refreshUser());
                 },
                 icon: const Icon(Icons.star),
                 label: const Text('Tornar-se Premium'),
@@ -198,7 +259,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
 
-            const SizedBox(height: 16),
+            if (user?.isPremium == true)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: ElevatedButton.icon(
+                  onPressed: _isLoading ? null : _cancelPremium,
+                  icon: const Icon(Icons.star_border),
+                  label: const Text('Cancelar Assinatura Premium'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange.shade700,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 48),
+                  ),
+                ),
+              ),
 
             ElevatedButton.icon(
               onPressed: () {

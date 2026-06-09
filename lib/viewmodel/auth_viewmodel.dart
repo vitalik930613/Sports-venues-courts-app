@@ -149,4 +149,20 @@ class AuthViewModel {
       );
     }
   }
+
+  Future<void> cancelPremium() async {
+    if (_currentUser == null) throw Exception('Usuário não logado');
+    if (_currentUser!.isPremium == false)
+      throw Exception('Usuário não é premium');
+
+    try {
+      final response = await ApiClient().patch('/auth/cancel-premium', {});
+      final updatedUser = User.fromJson(response['user']);
+      await _saveAuthData(_token!, updatedUser);
+    } catch (e) {
+      throw Exception(
+        'Erro ao cancelar assinatura: ${e.toString().replaceFirst('Exception: ', '')}',
+      );
+    }
+  }
 }
