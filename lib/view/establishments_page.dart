@@ -45,12 +45,13 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
           child: Image.asset('assets/images/cancha_logo.png', height: 60),
         ),
-        backgroundColor: Colors.white,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -84,7 +85,7 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
             MaterialPageRoute(builder: (_) => const WearableScreen()),
           );
         },
-        backgroundColor: Colors.green,
+        backgroundColor: primary,
         child: const Icon(Icons.watch, color: Colors.white),
       ),
     );
@@ -131,7 +132,7 @@ class _EstablishmentCardState extends State<_EstablishmentCard> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade300),
         ),

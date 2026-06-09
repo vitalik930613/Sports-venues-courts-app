@@ -66,7 +66,6 @@ class _CalendarPageState extends State<CalendarPage> {
     setState(() => _isLoading = true);
     try {
       await _bookingVM.cancelBooking(booking.id);
-      // Recarrega os dados após cancelar
       await _loadData();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -94,14 +93,12 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Minhas Reservas'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
+      backgroundColor: bgColor,
+      appBar: AppBar(title: const Text('Minhas Reservas'), elevation: 0),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error.isNotEmpty
@@ -119,16 +116,16 @@ class _CalendarPageState extends State<CalendarPage> {
                 final courtName =
                     _courtNames[b.courtId] ?? 'Quadra #${b.courtId}';
                 final isCanceled = b.status == BookingStatus.canceled;
-                final bgColor = isCanceled
+                final bgCard = isCanceled
                     ? Colors.grey.shade300
-                    : Colors.green.shade50;
+                    : primary.withOpacity(0.08);
 
                 return Card(
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  color: bgColor,
+                  color: bgCard,
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: Column(
@@ -142,9 +139,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: isCanceled
-                                      ? Colors.black54
-                                      : Colors.black,
+                                  color: isCanceled ? Colors.black54 : null,
                                 ),
                               ),
                             ),
@@ -154,7 +149,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: isCanceled ? Colors.grey : Colors.green,
+                                color: isCanceled ? Colors.grey : primary,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(

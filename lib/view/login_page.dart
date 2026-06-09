@@ -62,8 +62,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: bgColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -83,12 +86,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    const Text(
+                    Text(
                       'Login',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: primary,
                       ),
                     ),
 
@@ -169,11 +172,9 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: forgotPassword,
-                        child: const Text(
+                        child: Text(
                           'Esqueci a minha senha',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 14, 134, 34),
-                          ),
+                          style: TextStyle(color: primary),
                         ),
                       ),
                     ),
@@ -185,12 +186,6 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: isLoading ? null : login,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
                         child: isLoading
                             ? const CircularProgressIndicator(
                                 color: Colors.white,
@@ -217,11 +212,9 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             );
                           },
-                          child: const Text(
+                          child: Text(
                             'Criar conta',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 14, 134, 34),
-                            ),
+                            style: TextStyle(color: primary),
                           ),
                         ),
                       ],

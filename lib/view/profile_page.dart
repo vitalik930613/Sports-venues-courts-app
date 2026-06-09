@@ -131,14 +131,12 @@ class _ProfilePageState extends State<ProfilePage> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    final primary = Theme.of(context).colorScheme.primary;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Meu Perfil'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
+      backgroundColor: bgColor,
+      appBar: AppBar(title: const Text('Meu Perfil'), elevation: 0),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -162,6 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 8),
             Text(user!.phone, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 32),
+
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.push(
@@ -172,12 +171,13 @@ class _ProfilePageState extends State<ProfilePage> {
               icon: const Icon(Icons.lock_reset),
               label: const Text('Alterar Senha'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: primary,
                 foregroundColor: Colors.white,
                 minimumSize: const Size(double.infinity, 48),
               ),
             ),
             const SizedBox(height: 16),
+
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.push(
@@ -194,8 +194,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
-
             const SizedBox(height: 16),
+
             ElevatedButton.icon(
               onPressed: _confirmDeleteAccount,
               icon: const Icon(Icons.delete_forever),
@@ -207,6 +207,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 16),
+
             ElevatedButton.icon(
               onPressed: () async {
                 await AuthViewModel.instance.logout();

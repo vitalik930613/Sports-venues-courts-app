@@ -87,13 +87,9 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         widget.court.id,
         date,
       );
-      setState(() {
-        _bookingsOnSelectedDate = bookings;
-      });
+      setState(() => _bookingsOnSelectedDate = bookings);
     } catch (e) {
-      setState(() {
-        _bookingsOnSelectedDate = [];
-      });
+      setState(() => _bookingsOnSelectedDate = []);
     }
   }
 
@@ -134,22 +130,18 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
             (booking.startTime.isBefore(end) && booking.endTime.isAfter(start)),
       );
 
-      bool isAvailable = !isPast && !isOccupied;
-
       slots.add(
         TimeSlot(
           startTime: start,
           endTime: end,
-          isAvailable: isAvailable,
+          isAvailable: !isPast && !isOccupied,
           isSelected: false,
         ),
       );
       current = end;
     }
 
-    setState(() {
-      _timeSlots = slots;
-    });
+    setState(() => _timeSlots = slots);
   }
 
   TimeOfDay _parseTime(String timeStr) {
@@ -238,20 +230,16 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
 
   String _formatTimeWithoutSeconds(String time) {
     final parts = time.split(':');
-    if (parts.length >= 2) {
-      return '${parts[0]}:${parts[1]}';
-    }
+    if (parts.length >= 2) return '${parts[0]}:${parts[1]}';
     return time;
   }
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.court.name),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
+      appBar: AppBar(title: Text(widget.court.name)),
       body: _loadingSchedule
           ? const Center(child: CircularProgressIndicator())
           : _error.isNotEmpty
@@ -303,10 +291,10 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                       children: [
                         Text(
                           'R\$ ${_schedule!.priceBrl.toStringAsFixed(2)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: primary,
                           ),
                         ),
                         Text(
@@ -391,6 +379,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                           final slot = _timeSlots[index];
                           return _TimeSlotBox(
                             slot: slot,
+                            primaryColor: primary,
                             onTap: () => _onSlotSelected(index),
                           );
                         },
@@ -404,7 +393,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                         ? _confirmBooking
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: primary,
                       minimumSize: const Size(double.infinity, 48),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -448,16 +437,20 @@ class TimeSlot {
     this.isSelected = false,
   });
 
-  String get formattedTime {
-    return '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
-  }
+  String get formattedTime =>
+      '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
 }
 
 class _TimeSlotBox extends StatelessWidget {
   final TimeSlot slot;
+  final Color primaryColor;
   final VoidCallback onTap;
 
-  const _TimeSlotBox({required this.slot, required this.onTap});
+  const _TimeSlotBox({
+    required this.slot,
+    required this.primaryColor,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -468,7 +461,7 @@ class _TimeSlotBox extends StatelessWidget {
       backgroundColor = Colors.grey.shade500;
       textColor = Colors.white;
     } else if (slot.isSelected) {
-      backgroundColor = Colors.green.shade600;
+      backgroundColor = primaryColor;
       textColor = Colors.white;
     }
 
@@ -480,9 +473,7 @@ class _TimeSlotBox extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: slot.isSelected
-                ? Colors.green.shade700
-                : Colors.grey.shade300,
+            color: slot.isSelected ? primaryColor : Colors.grey.shade300,
             width: slot.isSelected ? 2 : 1,
           ),
         ),

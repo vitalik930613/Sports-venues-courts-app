@@ -3,8 +3,6 @@ import '../../viewmodel/booking_viewmodel.dart';
 import '../../viewmodel/court_viewmodel.dart';
 import '../../viewmodel/establishment_viewmodel.dart';
 import '../../model/court_booking.dart';
-import '../../model/court.dart';
-import '../../model/establishment.dart';
 
 class WearableScreen extends StatefulWidget {
   const WearableScreen({super.key});
