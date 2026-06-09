@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/view/premium_upgrade_page.dart';
+import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 
-class ThemesPage extends StatelessWidget {
+class ThemesPage extends StatefulWidget {
   const ThemesPage({super.key});
 
+  @override
+  State<ThemesPage> createState() => _ThemesPageState();
+}
+
+class _ThemesPageState extends State<ThemesPage> {
   static const List<Map<String, dynamic>> _themes = [
     {
       'id': 'default',
@@ -69,6 +76,14 @@ class ThemesPage extends StatelessWidget {
   ];
 
   void _applyTheme(BuildContext context, Map<String, dynamic> theme) {
+    final user = AuthViewModel.instance.currentUser;
+    final isPremiumTheme = theme['tag'] == 'Premium';
+
+    if (isPremiumTheme && (user?.isPremium != true)) {
+      _showPremiumRequiredDialog(context);
+      return;
+    }
+
     final provider = context.read<ThemeProvider>();
     provider.setTheme(theme['id'] as String);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -80,9 +95,42 @@ class ThemesPage extends StatelessWidget {
     );
   }
 
+  void _showPremiumRequiredDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('🎨 Tema Premium'),
+        content: const Text(
+          'Este tema é exclusivo para assinantes Premium.\n'
+          'Deseja se tornar Premium agora?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Agora não'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PremiumUpgradePage()),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.amber[700]),
+            child: const Text('Tornar-se Premium'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentThemeId = context.watch<ThemeProvider>().currentThemeId;
+
+    final isUserPremium =
+        AuthViewModel.instance.currentUser?.isPremium ?? false;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
@@ -117,6 +165,8 @@ class ThemesPage extends StatelessWidget {
             (theme) => _ThemeCard(
               theme: theme,
               isSelected: currentThemeId == theme['id'],
+              isUserPremium: isUserPremium,
+
               onTap: () => _applyTheme(context, theme),
             ),
           ),
@@ -129,128 +179,154 @@ class ThemesPage extends StatelessWidget {
 class _ThemeCard extends StatelessWidget {
   final Map<String, dynamic> theme;
   final bool isSelected;
+  final bool isUserPremium;
   final VoidCallback onTap;
 
   const _ThemeCard({
     required this.theme,
     required this.isSelected,
+    required this.isUserPremium,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = theme['previewColors'] as List<Color>;
+    final isPremiumTheme = theme['tag'] == 'Premium';
+    final canSelect = !isPremiumTheme || isUserPremium;
 
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? const Color(0xFF4CAF50) : Colors.transparent,
-            width: 2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.07),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: SizedBox(
-                  width: 64,
-                  height: 64,
-                  child: Column(
-                    children: [
-                      Expanded(child: Container(color: colors[0])),
-                      Expanded(
-                        child: Row(
+      child: Opacity(
+        opacity: canSelect ? 1.0 : 0.6,
+        child: Stack(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFF4CAF50)
+                      : Colors.transparent,
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.07),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SizedBox(
+                        width: 64,
+                        height: 64,
+                        child: Column(
                           children: [
-                            Expanded(child: Container(color: colors[1])),
-                            Expanded(child: Container(color: colors[2])),
+                            Expanded(child: Container(color: colors[0])),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container(color: colors[1])),
+                                  Expanded(child: Container(color: colors[2])),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          theme['name'] as String,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF1A1A1A),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: (theme['tagColor'] as Color).withOpacity(
-                              0.12,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            theme['tag'] as String,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: theme['tagColor'] as Color,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      theme['description'] as String,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF757575),
+                    const SizedBox(width: 16),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                theme['name'] as String,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: (theme['tagColor'] as Color)
+                                      .withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  theme['tag'] as String,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme['tagColor'] as Color,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            theme['description'] as String,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF757575),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
+                    const SizedBox(width: 8),
+                    if (isSelected)
+                      const Icon(
+                        Icons.check_circle,
+                        color: Color(0xFF4CAF50),
+                        size: 26,
+                      )
+                    else
+                      const Icon(
+                        Icons.radio_button_unchecked,
+                        color: Color(0xFFBDBDBD),
+                        size: 26,
+                      ),
                   ],
                 ),
               ),
+            ),
 
-              const SizedBox(width: 8),
-              if (isSelected)
-                const Icon(
-                  Icons.check_circle,
-                  color: Color(0xFF4CAF50),
-                  size: 26,
-                )
-              else
-                const Icon(
-                  Icons.radio_button_unchecked,
-                  color: Color(0xFFBDBDBD),
-                  size: 26,
+            if (!canSelect)
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.45),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.lock, color: Colors.white, size: 14),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
