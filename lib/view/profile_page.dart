@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/user.dart';
+import 'package:mobile/view/premium_upgrade_page.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/login_page.dart';
 import 'package:mobile/view/change_password_page.dart';
@@ -176,6 +177,27 @@ class _ProfilePageState extends State<ProfilePage> {
                 minimumSize: const Size(double.infinity, 48),
               ),
             ),
+            const SizedBox(height: 16),
+
+            if (!(user?.isPremium ?? false))
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PremiumUpgradePage(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.star),
+                label: const Text('Tornar-se Premium'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber[700],
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 48),
+                ),
+              ),
+
             const SizedBox(height: 16),
 
             ElevatedButton.icon(
