@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/reset_password_page.dart';
 
@@ -66,19 +67,19 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   children: [
                     Center(
                       child: Image.asset(
-                        'assets/images/cancha_logo.png',
+                        ThemeUtils.getLogoPath(context),
                         height: 250,
                       ),
                     ),
                     const SizedBox(height: 20),
-                     Text(
-  'Recuperar senha',
-  style: TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-    color: Theme.of(context).colorScheme.primary,
-  ),
-),
+                    Text(
+                      'Recuperar senha',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                     const SizedBox(height: 40),
                     TextFormField(
                       controller: emailController,
@@ -106,7 +107,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : sendResetCode,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

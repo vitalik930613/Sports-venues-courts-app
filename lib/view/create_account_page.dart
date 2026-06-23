@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/terms_page.dart';
 
@@ -24,17 +25,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   bool obscurePassword = true;
   bool termConditions = false;
 
-
   void register() async {
-      if (!termConditions){
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Você precisa aceitar os Termos de Uso e Política de Privacidade'),
-              backgroundColor: Colors.red
-              ),
-           );
-           return;
-        }
+    if (!termConditions) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Você precisa aceitar os Termos de Uso e Política de Privacidade',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
     if (_formKey.currentState!.validate() && selectedBirthDate != null) {
       setState(() => isLoading = true);
       try {
@@ -47,7 +49,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           birthDate: birthDateStr,
           password: passwordController.text,
         );
-      
+
         if (success && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Conta criada com sucesso!')),
@@ -93,20 +95,20 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   children: [
                     Center(
                       child: Image.asset(
-                        'assets/images/cancha_logo.png',
+                        ThemeUtils.getLogoPath(context),
                         height: 250,
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                  Text(
-  'Criar Conta',
-  style: TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-    color: Theme.of(context).colorScheme.primary,
-  ),
-),
+                    Text(
+                      'Criar Conta',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
 
                     const SizedBox(height: 40),
 
@@ -279,32 +281,35 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       },
                     ),
 
-                    Row(children: [
-                      Checkbox(value: termConditions, 
-                      onChanged: (value) {
-                        setState(() {
-                          termConditions = value ?? false;
-                        });
-                       },
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => TermsPage
-                              ())
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: termConditions,
+                          onChanged: (value) {
+                            setState(() {
+                              termConditions = value ?? false;
+                            });
+                          },
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TermsPage(),
+                                ),
                               );
-                         },
-                         child: const Text(
-                          'Li e aceito os Termos de Uso e Politica de Privacidade',
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
+                            },
+                            child: const Text(
+                              'Li e aceito os Termos de Uso e Politica de Privacidade',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
                           ),
-                         ),
-                        )
-                       )
-                     ],
+                        ),
+                      ],
                     ),
 
                     const SizedBox(height: 20),
@@ -315,11 +320,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : register,
                         style: ElevatedButton.styleFrom(
-  backgroundColor: Theme.of(context).colorScheme.primary,
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(12),
-  ),
-),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                         child: isLoading
                             ? const CircularProgressIndicator(
                                 color: Colors.white,
@@ -341,12 +348,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child:  Text(
-  'Fazer login',
-  style: TextStyle(
-    color: Theme.of(context).colorScheme.primary,
-  ),
-),
+                          child: Text(
+                            'Fazer login',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
                         ),
                       ],
                     ),

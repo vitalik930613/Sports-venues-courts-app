@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -63,12 +64,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 children: [
                   Center(
                     child: Image.asset(
-                      'assets/images/cancha_logo.png',
+                      ThemeUtils.getLogoPath(context),
                       height: 150,
                     ),
                   ),
                   const SizedBox(height: 20),
-                   Text(
+                  Text(
                     'Redefinir senha',
                     style: TextStyle(
                       fontSize: 28,

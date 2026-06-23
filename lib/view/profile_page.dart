@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/user.dart';
 import 'package:mobile/theme/theme_provider.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/view/premium_upgrade_page.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/login_page.dart';
@@ -321,14 +322,14 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            Image.asset('assets/images/cancha_logo.png', height: 80),
+            Image.asset(ThemeUtils.getLogoPath(context), height: 80),
             const SizedBox(height: 20),
             CircleAvatar(
               radius: 60,
               backgroundImage: user!.photo != null && user!.photo!.isNotEmpty
                   ? NetworkImage(user!.photo!)
                   : const AssetImage('assets/images/default_perfil.jpg')
-                      as ImageProvider,
+                        as ImageProvider,
             ),
             const SizedBox(height: 24),
             Text(
@@ -360,7 +361,6 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildButtonRow(deleteAccountButton, logoutButton),
             const SizedBox(height: 16),
-            // Botão premium em largura total, já tem minimumSize infinito
             premiumButton,
           ],
         ),

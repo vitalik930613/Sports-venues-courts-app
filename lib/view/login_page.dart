@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/view/create_account_page.dart';
 import 'package:mobile/view/forget_password_page.dart';
 import 'package:mobile/view/main_page.dart';
@@ -80,15 +81,13 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Center(
                       child: Image.asset(
-                        'assets/images/cancha_logo.png',
+                        ThemeUtils.getLogoPath(context),
                         height: 250,
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                   Text('Login', style: TextStyle(color: primary)),
-                   
-
+                    Text('Login', style: TextStyle(color: primary)),
 
                     const SizedBox(height: 40),
 

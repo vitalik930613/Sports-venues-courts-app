@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/utils/geocoding_helper.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/view/courts_page.dart';
 import 'package:mobile/view/wearable/wearable_screen.dart';
 import 'package:mobile/viewmodel/establishment_viewmodel.dart';
@@ -50,7 +51,7 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: Image.asset('assets/images/cancha_logo.png', height: 60),
+          child: Image.asset(ThemeUtils.getLogoPath(context), height: 60),
         ),
       ),
       body: _isLoading
@@ -185,7 +186,11 @@ class _EstablishmentCardState extends State<_EstablishmentCard> {
                 ],
               ),
             ),
-             Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.onSurface, size: 16),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Theme.of(context).colorScheme.onSurface,
+              size: 16,
+            ),
           ],
         ),
       ),
