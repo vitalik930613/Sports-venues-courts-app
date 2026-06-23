@@ -1,0 +1,9 @@
+flutter_native_splash:
+  color: "#4CAF50"
+  image: assets/images/cancha_logo.png
+  android: true
+  ios: true
+  web: false
+  android_gravity: center
+  ios_content_mode: center
+  fullscreen: true

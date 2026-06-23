@@ -82,14 +82,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.pop(context, true);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Digite "DELETE" para confirmar'),
-                    backgroundColor: Colors.red,
+                  SnackBar(
+                    content: const Text('Digite "DELETE" para confirmar'),
+                    backgroundColor: Theme.of(context).colorScheme.error,
                   ),
                 );
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
             child: const Text(
               'Confirmar',
               style: TextStyle(color: Colors.white),
@@ -129,7 +131,10 @@ class _ProfilePageState extends State<ProfilePage> {
         Navigator.pop(context);
         String errorMsg = e.toString().replaceFirst('Exception: ', '');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMsg), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text(errorMsg),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
         );
       }
     }
@@ -150,7 +155,9 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
             child: const Text('Sim, cancelar'),
           ),
         ],
@@ -166,11 +173,11 @@ class _ProfilePageState extends State<ProfilePage> {
       themeProvider.setTheme('default');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
+          SnackBar(
+            content: const Text(
               'Assinatura cancelada. Você agora é um usuário gratuito.',
             ),
-            backgroundColor: Colors.orange,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         );
         _refreshUser();
@@ -182,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
             content: Text(
               'Erro: ${e.toString().replaceFirst('Exception: ', '')}',
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }
@@ -207,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final primary = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
     final isUserPremium = user?.isPremium ?? false;
 
@@ -228,7 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
       icon: const Icon(Icons.lock_reset),
       label: const Text('Alterar Senha'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: MaterialStatePropertyAll(primary),
+        backgroundColor: MaterialStatePropertyAll(colorScheme.secondary),
       ),
     );
 
@@ -242,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
       icon: const Icon(Icons.palette_outlined),
       label: const Text('Temas'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: const MaterialStatePropertyAll(Color(0xFF7B1FA2)),
+        backgroundColor: MaterialStatePropertyAll(colorScheme.primary),
       ),
     );
 
@@ -251,7 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
       icon: const Icon(Icons.delete_forever),
       label: const Text('Deletar Conta'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: const MaterialStatePropertyAll(Colors.red),
+        backgroundColor: MaterialStatePropertyAll(colorScheme.error),
       ),
     );
 
@@ -268,7 +275,9 @@ class _ProfilePageState extends State<ProfilePage> {
       icon: const Icon(Icons.exit_to_app),
       label: const Text('Sair'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: const MaterialStatePropertyAll(Colors.grey),
+        backgroundColor: MaterialStatePropertyAll(
+          colorScheme.onSurface.withOpacity(0.5),
+        ),
       ),
     );
 
@@ -278,7 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: const Icon(Icons.star_border),
             label: const Text('Cancelar Assinatura Premium'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange.shade700,
+              backgroundColor: colorScheme.secondary,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
@@ -296,7 +305,7 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: const Icon(Icons.star),
             label: const Text('Tornar-se Premium'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber[700],
+              backgroundColor: colorScheme.primary,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
@@ -308,7 +317,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(title: const Text('Meu Perfil'), elevation: 0),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
@@ -319,22 +328,39 @@ class _ProfilePageState extends State<ProfilePage> {
               backgroundImage: user!.photo != null && user!.photo!.isNotEmpty
                   ? NetworkImage(user!.photo!)
                   : const AssetImage('assets/images/default_perfil.jpg')
-                        as ImageProvider,
+                      as ImageProvider,
             ),
             const SizedBox(height: 24),
             Text(
               user!.name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onBackground,
+              ),
             ),
             const SizedBox(height: 8),
-            Text(user!.email, style: const TextStyle(fontSize: 16)),
+            Text(
+              user!.email,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onBackground.withOpacity(0.7),
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(user!.phone, style: const TextStyle(fontSize: 16)),
+            Text(
+              user!.phone,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onBackground.withOpacity(0.7),
+              ),
+            ),
             const SizedBox(height: 32),
             _buildButtonRow(changePasswordButton, themesButton),
             const SizedBox(height: 16),
             _buildButtonRow(deleteAccountButton, logoutButton),
             const SizedBox(height: 16),
+            // Botão premium em largura total, já tem minimumSize infinito
             premiumButton,
           ],
         ),

@@ -314,9 +314,9 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                       icon: const Icon(Icons.map),
                       label: const Text('Ver localização no mapa'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                      ),
+  backgroundColor: Theme.of(context).colorScheme.primary,
+  foregroundColor: Colors.white,
+),
                     ),
                     const SizedBox(height: 24),
                     GestureDetector(
@@ -454,11 +454,13 @@ class _TimeSlotBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Colors.grey.shade200;
+    Color backgroundColor = Theme.of(context).colorScheme.surface;
+
     Color textColor = Colors.black;
 
     if (!slot.isAvailable) {
-      backgroundColor = Colors.grey.shade500;
+      backgroundColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.3);
+
       textColor = Colors.white;
     } else if (slot.isSelected) {
       backgroundColor = primaryColor;

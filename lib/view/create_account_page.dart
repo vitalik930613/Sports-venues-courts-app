@@ -99,14 +99,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    const Text(
-                      'Criar Conta',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
+                  Text(
+  'Criar Conta',
+  style: TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: Theme.of(context).colorScheme.primary,
+  ),
+),
 
                     const SizedBox(height: 40),
 
@@ -315,11 +315,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : register,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+  backgroundColor: Theme.of(context).colorScheme.primary,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+),
                         child: isLoading
                             ? const CircularProgressIndicator(
                                 color: Colors.white,
@@ -341,12 +341,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
-                            'Fazer login',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 14, 134, 34),
-                            ),
-                          ),
+                          child:  Text(
+  'Fazer login',
+  style: TextStyle(
+    color: Theme.of(context).colorScheme.primary,
+  ),
+),
                         ),
                       ],
                     ),

@@ -71,14 +71,14 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Recuperar senha',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
+                     Text(
+  'Recuperar senha',
+  style: TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: Theme.of(context).colorScheme.primary,
+  ),
+),
                     const SizedBox(height: 40),
                     TextFormField(
                       controller: emailController,
@@ -106,7 +106,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : sendResetCode,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

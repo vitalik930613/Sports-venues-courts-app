@@ -76,14 +76,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Alterar senha',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
+                Text(
+  'Alterar senha',
+  style: TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+    color: Theme.of(context).colorScheme.primary,
+  ),
+),
                   const SizedBox(height: 40),
 
                   TextFormField(
@@ -183,11 +183,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     child: ElevatedButton(
                       onPressed: isLoading ? null : _changePassword,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+  backgroundColor: Theme.of(context).colorScheme.primary,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+),
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(

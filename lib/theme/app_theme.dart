@@ -9,6 +9,7 @@ class AppThemes {
   static const String arenaId = 'arena';
   static const String sunsetId = 'sunset';
 
+  // Função getTheme – deve existir
   static ThemeData getTheme(String themeId) {
     switch (themeId) {
       case midnightId:
@@ -25,56 +26,7 @@ class AppThemes {
     }
   }
 
-  static final ThemeData _default = _build(
-    primary: const Color(0xFF4CAF50),
-    onPrimary: Colors.white,
-    secondary: const Color(0xFF388E3C),
-    surface: Colors.white,
-    background: Colors.white,
-    onBackground: Colors.black,
-    brightness: Brightness.light,
-  );
-
-  static final ThemeData _midnight = _build(
-    primary: const Color(0xFFE94560),
-    onPrimary: Colors.white,
-    secondary: const Color(0xFF0F3460),
-    surface: const Color(0xFF16213E),
-    background: const Color(0xFF1A1A2E),
-    onBackground: Colors.white,
-    brightness: Brightness.dark,
-  );
-
-  static final ThemeData _campo = _build(
-    primary: const Color(0xFF2E7D32),
-    onPrimary: Colors.white,
-    secondary: const Color(0xFFFFC107),
-    surface: const Color(0xFF1B5E20),
-    background: const Color(0xFF1B5E20),
-    onBackground: Colors.white,
-    brightness: Brightness.dark,
-  );
-
-  static final ThemeData _arena = _build(
-    primary: const Color(0xFF1565C0),
-    onPrimary: Colors.white,
-    secondary: const Color(0xFF82B1FF),
-    surface: const Color(0xFF0D47A1),
-    background: const Color(0xFF0D47A1),
-    onBackground: Colors.white,
-    brightness: Brightness.dark,
-  );
-
-  static final ThemeData _sunset = _build(
-    primary: const Color(0xFFE64A19),
-    onPrimary: Colors.white,
-    secondary: const Color(0xFFFFD54F),
-    surface: const Color(0xFFBF360C),
-    background: const Color(0xFFBF360C),
-    onBackground: Colors.white,
-    brightness: Brightness.dark,
-  );
-
+  // Função _build – deve existir
   static ThemeData _build({
     required Color primary,
     required Color onPrimary,
@@ -104,18 +56,14 @@ class AppThemes {
       primaryColor: primary,
       scaffoldBackgroundColor: background,
       brightness: brightness,
-
       appBarTheme: AppBarTheme(
         backgroundColor: brightness == Brightness.dark ? surface : Colors.white,
-        foregroundColor: brightness == Brightness.dark
-            ? Colors.white
-            : Colors.black,
+        foregroundColor: brightness == Brightness.dark ? Colors.white : Colors.black,
         elevation: 0,
         iconTheme: IconThemeData(
           color: brightness == Brightness.dark ? Colors.white : Colors.black,
         ),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primary,
@@ -125,11 +73,9 @@ class AppThemes {
           ),
         ),
       ),
-
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: primary),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         focusedBorder: OutlineInputBorder(
@@ -138,13 +84,11 @@ class AppThemes {
         ),
         prefixIconColor: primary,
       ),
-
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: primary,
         unselectedItemColor: Colors.grey,
         backgroundColor: brightness == Brightness.dark ? surface : Colors.white,
       ),
-
       checkboxTheme: CheckboxThemeData(
         fillColor: MaterialStateProperty.resolveWith(
           (states) => states.contains(MaterialState.selected) ? primary : null,
@@ -152,4 +96,54 @@ class AppThemes {
       ),
     );
   }
+
+  static final ThemeData _default = _build(
+    primary: const Color(0xFF2E7D32),
+    onPrimary: Colors.white,
+    secondary: const Color(0xFF81C784),
+    surface: Colors.white,
+    background: Colors.grey.shade50,
+    onBackground: Colors.black87,
+    brightness: Brightness.light,
+  );
+
+  static final ThemeData _midnight = _build(
+    primary: const Color(0xFFFF6B6B),
+    onPrimary: Colors.white,
+    secondary: const Color(0xFF4ECDC4),
+    surface: const Color(0xFF1A1A2E),
+    background: const Color(0xFF16213E),
+    onBackground: Colors.white70,
+    brightness: Brightness.dark,
+  );
+
+  static final ThemeData _campo = _build(
+    primary: const Color(0xFF4CAF50),
+    onPrimary: Colors.white,
+    secondary: const Color(0xFFFFC107),
+    surface: const Color(0xFF1B5E20),
+    background: const Color(0xFF1B5E20),
+    onBackground: Colors.white70,
+    brightness: Brightness.dark,
+  );
+
+  static final ThemeData _arena = _build(
+    primary: const Color(0xFF2979FF),
+    onPrimary: Colors.white,
+    secondary: const Color(0xFF82B1FF),
+    surface: const Color(0xFF0D47A1),
+    background: const Color(0xFF0D47A1),
+    onBackground: Colors.white70,
+    brightness: Brightness.dark,
+  );
+
+  static final ThemeData _sunset = _build(
+    primary: const Color(0xFFFF6F00),
+    onPrimary: Colors.white,
+    secondary: const Color(0xFFFFD54F),
+    surface: const Color(0xFFBF360C),
+    background: const Color(0xFFBF360C),
+    onBackground: Colors.white70,
+    brightness: Brightness.dark,
+  );
 }

@@ -78,7 +78,7 @@ class _CalendarPageState extends State<CalendarPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text('Erro: $e'), backgroundColor: Theme.of(context).colorScheme.error),
         );
       }
     } finally {
