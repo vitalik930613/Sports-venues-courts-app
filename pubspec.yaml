@@ -26,6 +26,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/cancha_logo.png
+    - assets/images/cancha_dark_logo.png
     - assets/images/default_futsal.jpg
     - assets/images/default_padel.jpg
     - assets/images/default_soccer.jpg
