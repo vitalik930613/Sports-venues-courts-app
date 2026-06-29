@@ -18,7 +18,7 @@ class _ThemesPageState extends State<ThemesPage> {
       'name': 'Padrão',
       'description': 'O tema original do Cancha. Limpo e funcional.',
       'previewColors': [
-        Color(0xFF4CAF50),
+        Color(0xFF2E7D32),
         Color(0xFFFFFFFF),
         Color(0xFFF5F5F5),
       ],
@@ -32,7 +32,7 @@ class _ThemesPageState extends State<ThemesPage> {
       'previewColors': [
         Color(0xFF1A1A2E),
         Color(0xFF16213E),
-        Color(0xFFE94560),
+        Color(0xFFFF8A80),
       ],
       'tag': 'Premium',
       'tagColor': Color(0xFFE94560),
@@ -42,8 +42,8 @@ class _ThemesPageState extends State<ThemesPage> {
       'name': 'Campo Natural',
       'description': 'Inspirado no gramado. Verde intenso e terra.',
       'previewColors': [
-        Color(0xFF2E7D32),
-        Color(0xFF1B5E20),
+        Color(0xFF66BB6A),
+        Color(0xFF17461B),
         Color(0xFFFFC107),
       ],
       'tag': 'Premium',
@@ -54,9 +54,9 @@ class _ThemesPageState extends State<ThemesPage> {
       'name': 'Arena',
       'description': 'Azul vibrante para quem joga com estilo.',
       'previewColors': [
-        Color(0xFF0D47A1),
-        Color(0xFF1565C0),
         Color(0xFF82B1FF),
+        Color(0xFF0B2F6B),
+        Color(0xFF40C4FF),
       ],
       'tag': 'Premium',
       'tagColor': Color(0xFF2979FF),
@@ -66,8 +66,8 @@ class _ThemesPageState extends State<ThemesPage> {
       'name': 'Pôr do Sol',
       'description': 'Tons quentes de laranja e vermelho. Energia máxima.',
       'previewColors': [
-        Color(0xFFBF360C),
-        Color(0xFFE64A19),
+        Color(0xFFFFB74D),
+        Color(0xFF5E250D),
         Color(0xFFFFD54F),
       ],
       'tag': 'Premium',
@@ -88,8 +88,11 @@ class _ThemesPageState extends State<ThemesPage> {
     provider.setTheme(theme['id'] as String);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Tema "${theme['name']}" aplicado!'),
-        backgroundColor: Colors.green,
+        content: Text(
+          'Tema "${theme['name']}" aplicado!',
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -117,7 +120,10 @@ class _ThemesPageState extends State<ThemesPage> {
                 MaterialPageRoute(builder: (_) => const PremiumUpgradePage()),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.amber[700]),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            ),
             child: const Text('Tornar-se Premium'),
           ),
         ],
@@ -128,37 +134,41 @@ class _ThemesPageState extends State<ThemesPage> {
   @override
   Widget build(BuildContext context) {
     final currentThemeId = context.watch<ThemeProvider>().currentThemeId;
-
     final isUserPremium =
         AuthViewModel.instance.currentUser?.isPremium ?? false;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Temas'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(color: const Color(0xFFE0E0E0), height: 1),
+          child: Container(
+            color: colorScheme.onSurface.withValues(alpha: 0.1),
+            height: 1,
+          ),
         ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const Text(
+          Text(
             'Personalize sua experiência',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1A1A),
+              color: colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             'Escolha o tema que combina com você.',
-            style: TextStyle(fontSize: 14, color: Color(0xFF757575)),
+            style: TextStyle(
+              fontSize: 14,
+              color: colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
           ),
           const SizedBox(height: 24),
           ..._themes.map(
@@ -166,7 +176,6 @@ class _ThemesPageState extends State<ThemesPage> {
               theme: theme,
               isSelected: currentThemeId == theme['id'],
               isUserPremium: isUserPremium,
-
               onTap: () => _applyTheme(context, theme),
             ),
           ),
@@ -194,6 +203,8 @@ class _ThemeCard extends StatelessWidget {
     final colors = theme['previewColors'] as List<Color>;
     final isPremiumTheme = theme['tag'] == 'Premium';
     final canSelect = !isPremiumTheme || isUserPremium;
+    final colorScheme = Theme.of(context).colorScheme;
+    final tagColor = theme['tagColor'] as Color;
 
     return GestureDetector(
       onTap: onTap,
@@ -205,17 +216,15 @@ class _ThemeCard extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isSelected
-                      ? const Color(0xFF4CAF50)
-                      : Colors.transparent,
+                  color: isSelected ? colorScheme.primary : Colors.transparent,
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.07),
+                    color: colorScheme.onSurface.withValues(alpha: 0.07),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -246,7 +255,6 @@ class _ThemeCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,10 +263,10 @@ class _ThemeCard extends StatelessWidget {
                             children: [
                               Text(
                                 theme['name'] as String,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF1A1A1A),
+                                  color: colorScheme.onSurface,
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -268,8 +276,7 @@ class _ThemeCard extends StatelessWidget {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: (theme['tagColor'] as Color)
-                                      .withValues(alpha: 0.12),
+                                  color: tagColor.withValues(alpha: 0.12),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
@@ -277,7 +284,7 @@ class _ThemeCard extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600,
-                                    color: theme['tagColor'] as Color,
+                                    color: colorScheme.onSurface,
                                   ),
                                 ),
                               ),
@@ -286,33 +293,33 @@ class _ThemeCard extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             theme['description'] as String,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFF757575),
+                              color: colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-
                     const SizedBox(width: 8),
                     if (isSelected)
-                      const Icon(
+                      Icon(
                         Icons.check_circle,
-                        color: Color(0xFF4CAF50),
+                        color: colorScheme.primary,
                         size: 26,
                       )
                     else
-                      const Icon(
+                      Icon(
                         Icons.radio_button_unchecked,
-                        color: Color(0xFFBDBDBD),
+                        color: colorScheme.onSurface.withValues(alpha: 0.4),
                         size: 26,
                       ),
                   ],
                 ),
               ),
             ),
-
             if (!canSelect)
               Positioned(
                 top: 10,
@@ -320,7 +327,7 @@ class _ThemeCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.45),
+                    color: colorScheme.onSurface.withValues(alpha: 0.65),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.lock, color: Colors.white, size: 14),

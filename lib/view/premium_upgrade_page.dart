@@ -122,30 +122,28 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
     setState(() => _isLoading = true);
     try {
       await AuthViewModel.instance.cancelPremium();
+      if (!mounted) return;
       final themeProvider = context.read<ThemeProvider>();
       themeProvider.setTheme('default');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Assinatura cancelada. Você agora é um usuário gratuito.',
-            ),
-            backgroundColor: Colors.orange,
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Assinatura cancelada. Você agora é um usuário gratuito.',
           ),
-        );
-        Navigator.pop(context);
-      }
+          backgroundColor: Colors.orange,
+        ),
+      );
+      Navigator.pop(context);
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Erro: ${e.toString().replaceFirst('Exception: ', '')}',
-            ),
-            backgroundColor: Colors.red,
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Erro: ${e.toString().replaceFirst('Exception: ', '')}',
           ),
-        );
-      }
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -157,12 +155,7 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
     final isPremium = user?.isPremium ?? false;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Premium'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Premium'), elevation: 0),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -314,7 +307,7 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
                   label: const Text('TORNAR-SE PREMIUM'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber[700],
-                    foregroundColor: Colors.white,
+                    foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -338,6 +331,8 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
   }
 
   Widget _buildBenefitItem(IconData icon, String title, String subtitle) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Row(
       children: [
         Container(
@@ -362,7 +357,10 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
               ),
               Text(
                 subtitle,
-                style: const TextStyle(fontSize: 13, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: colorScheme.onSurface.withValues(alpha: 0.72),
+                ),
               ),
             ],
           ),

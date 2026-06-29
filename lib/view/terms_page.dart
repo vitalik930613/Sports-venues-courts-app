@@ -4,23 +4,17 @@ class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Termos de Uso e Privacidade', 
-          style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
-      ),
+      appBar: AppBar(title: const Text('Termos de Uso e Privacidade')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [ 
+          children: [
             const Text(
-             'Termos de uso', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              'Termos de uso',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Text('''
@@ -74,16 +68,15 @@ Os Termos de Uso poderão ser modificados a qualquer momento. A continuidade do 
 8. ENCERRAMENTO DA CONTA
 
 Os desenvolvedores poderão suspender ou encerrar contas que violem estes Termos de Uso.
-''', style: TextStyle(fontSize: 16, height: 1.5),
- ),
- const SizedBox(height: 32),
- const Text('Política de Privacidade',
- style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
- ),
+''', style: TextStyle(fontSize: 16, height: 1.5)),
+            const SizedBox(height: 32),
+            const Text(
+              'Política de Privacidade',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
 
- const SizedBox(height: 16),
- const Text(
-  '''
+            const SizedBox(height: 16),
+            const Text('''
 1. INFORMAÇÕES COLETADAS
 
 O aplicativo poderá coletar:
@@ -140,12 +133,10 @@ Esta Política de Privacidade poderá ser atualizada periodicamente. As alteraç
 Para dúvidas relacionadas aos Termos de Uso ou à Política de Privacidade, entre em contato através do e-mail:
 
 cancha@gmail.com
-''', 
-style: TextStyle(fontSize: 16, height: 1.5),
-          )
-        ],
+''', style: TextStyle(fontSize: 16, height: 1.5)),
+          ],
+        ),
       ),
-    ),
-  );
- }
+    );
+  }
 }

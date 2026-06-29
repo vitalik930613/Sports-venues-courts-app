@@ -78,7 +78,10 @@ class _CalendarPageState extends State<CalendarPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('Erro: $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
         );
       }
     } finally {
@@ -93,7 +96,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
@@ -117,8 +120,17 @@ class _CalendarPageState extends State<CalendarPage> {
                     _courtNames[b.courtId] ?? 'Quadra #${b.courtId}';
                 final isCanceled = b.status == BookingStatus.canceled;
                 final bgCard = isCanceled
-                    ? Colors.grey.shade300
-                    : primary.withOpacity(0.08);
+                    ? colorScheme.onSurface.withValues(alpha: 0.08)
+                    : colorScheme.primary.withValues(alpha: 0.08);
+                final statusColor = isCanceled
+                    ? colorScheme.onSurface
+                    : colorScheme.primary;
+                final statusTextColor = isCanceled
+                    ? colorScheme.surface
+                    : colorScheme.onPrimary;
+                final mutedIconColor = colorScheme.onSurface.withValues(
+                  alpha: 0.72,
+                );
 
                 return Card(
                   elevation: 2,
@@ -139,7 +151,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: isCanceled ? Colors.black54 : null,
+                                  color: colorScheme.onSurface,
                                 ),
                               ),
                             ),
@@ -149,15 +161,15 @@ class _CalendarPageState extends State<CalendarPage> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: isCanceled ? Colors.grey : primary,
+                                color: statusColor,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
                                 b.status == BookingStatus.confirmed
                                     ? 'Confirmada'
                                     : 'Cancelada',
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: statusTextColor,
                                   fontSize: 12,
                                 ),
                               ),
@@ -167,22 +179,26 @@ class _CalendarPageState extends State<CalendarPage> {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.calendar_today,
                               size: 16,
-                              color: Colors.grey,
+                              color: mutedIconColor,
                             ),
                             const SizedBox(width: 4),
-                            Text(_formatDate(b.startTime)),
+                            Text(
+                              _formatDate(b.startTime),
+                              style: TextStyle(color: colorScheme.onSurface),
+                            ),
                             const SizedBox(width: 16),
-                            const Icon(
+                            Icon(
                               Icons.access_time,
                               size: 16,
-                              color: Colors.grey,
+                              color: mutedIconColor,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${_formatTime(b.startTime)} - ${_formatTime(b.endTime)}',
+                              style: TextStyle(color: colorScheme.onSurface),
                             ),
                           ],
                         ),
@@ -195,8 +211,8 @@ class _CalendarPageState extends State<CalendarPage> {
                               icon: const Icon(Icons.cancel, size: 18),
                               label: const Text('Cancelar reserva'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red.shade700,
-                                foregroundColor: Colors.white,
+                                backgroundColor: colorScheme.error,
+                                foregroundColor: colorScheme.onError,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),

@@ -20,12 +20,46 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_native_splash: ^2.3.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/cancha_apk.png"
+  remove_alpha_ios: true
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/cancha_apk.png"
+  web:
+    generate: true
+    image_path: "assets/images/cancha_apk.png"
+    background_color: "#FFFFFF"
+    theme_color: "#2E7D32"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/cancha_logo.png
+  color_dark: "#16213E"
+  image_dark: assets/images/cancha_dark_logo.png
+  android: true
+  ios: true
+  web: true
+  android_gravity: center
+  ios_content_mode: center
+  web_image_mode: center
+  fullscreen: true
+  android_12:
+    color: "#FFFFFF"
+    image: assets/images/cancha_apk.png
+    color_dark: "#16213E"
+    image_dark: assets/images/cancha_apk.png
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/images/cancha_logo.png
+    - assets/images/cancha_dark_logo.png
+    - assets/images/cancha_apk.png
     - assets/images/default_futsal.jpg
     - assets/images/default_padel.jpg
     - assets/images/default_soccer.jpg

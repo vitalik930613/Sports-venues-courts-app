@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/view/create_account_page.dart';
 import 'package:mobile/view/forget_password_page.dart';
 import 'package:mobile/view/main_page.dart';
@@ -62,7 +63,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
@@ -80,20 +82,13 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Center(
                       child: Image.asset(
-                        'assets/images/cancha_logo.png',
+                        ThemeUtils.getLogoPath(context),
                         height: 250,
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: primary,
-                      ),
-                    ),
+                    Text('Login', style: TextStyle(color: primary)),
 
                     const SizedBox(height: 40),
 
@@ -187,12 +182,12 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : login,
                         child: isLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
+                            ? CircularProgressIndicator(
+                                color: colorScheme.onPrimary,
                               )
-                            : const Text(
+                            : Text(
                                 'ENTRAR',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: colorScheme.onPrimary),
                               ),
                       ),
                     ),

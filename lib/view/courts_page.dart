@@ -49,11 +49,7 @@ class _CourtsPageState extends State<CourtsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.establishment.name),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
+      appBar: AppBar(title: Text(widget.establishment.name)),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error.isNotEmpty
@@ -94,14 +90,18 @@ class _CourtCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(
+            color: colorScheme.onSurface.withValues(alpha: 0.16),
+          ),
         ),
         child: Row(
           children: [
@@ -142,12 +142,19 @@ class _CourtCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     _sportName(court.sport),
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withValues(alpha: 0.72),
+                    ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 16),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: colorScheme.onSurface,
+              size: 16,
+            ),
           ],
         ),
       ),

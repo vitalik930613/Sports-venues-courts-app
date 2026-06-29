@@ -152,8 +152,9 @@ class AuthViewModel {
 
   Future<void> cancelPremium() async {
     if (_currentUser == null) throw Exception('Usuário não logado');
-    if (_currentUser!.isPremium == false)
+    if (_currentUser!.isPremium == false) {
       throw Exception('Usuário não é premium');
+    }
 
     try {
       final response = await ApiClient().patch('/auth/cancel-premium', {});
