@@ -170,30 +170,28 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() => _isLoading = true);
     try {
       await AuthViewModel.instance.cancelPremium();
+      if (!mounted) return;
       final themeProvider = context.read<ThemeProvider>();
       themeProvider.setTheme('default');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Assinatura cancelada. Você agora é um usuário gratuito.',
-            ),
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Assinatura cancelada. Você agora é um usuário gratuito.',
           ),
-        );
-        _refreshUser();
-      }
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+        ),
+      );
+      _refreshUser();
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Erro: ${e.toString().replaceFirst('Exception: ', '')}',
-            ),
-            backgroundColor: Theme.of(context).colorScheme.error,
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Erro: ${e.toString().replaceFirst('Exception: ', '')}',
           ),
-        );
-      }
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -220,7 +218,6 @@ class _ProfilePageState extends State<ProfilePage> {
     final isUserPremium = user?.isPremium ?? false;
 
     final sideButtonStyle = ElevatedButton.styleFrom(
-      foregroundColor: Colors.white,
       minimumSize: const Size(0, 48),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -236,7 +233,8 @@ class _ProfilePageState extends State<ProfilePage> {
       icon: const Icon(Icons.lock_reset),
       label: const Text('Alterar Senha'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: MaterialStatePropertyAll(colorScheme.secondary),
+        backgroundColor: WidgetStatePropertyAll(colorScheme.secondary),
+        foregroundColor: WidgetStatePropertyAll(colorScheme.onSecondary),
       ),
     );
 
@@ -250,7 +248,8 @@ class _ProfilePageState extends State<ProfilePage> {
       icon: const Icon(Icons.palette_outlined),
       label: const Text('Temas'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: MaterialStatePropertyAll(colorScheme.primary),
+        backgroundColor: WidgetStatePropertyAll(colorScheme.primary),
+        foregroundColor: WidgetStatePropertyAll(colorScheme.onPrimary),
       ),
     );
 
@@ -259,26 +258,25 @@ class _ProfilePageState extends State<ProfilePage> {
       icon: const Icon(Icons.delete_forever),
       label: const Text('Deletar Conta'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: MaterialStatePropertyAll(colorScheme.error),
+        backgroundColor: WidgetStatePropertyAll(colorScheme.error),
+        foregroundColor: WidgetStatePropertyAll(colorScheme.onError),
       ),
     );
 
     final logoutButton = ElevatedButton.icon(
       onPressed: () async {
         await AuthViewModel.instance.logout();
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const LoginPage()),
-          );
-        }
+        if (!context.mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+        );
       },
       icon: const Icon(Icons.exit_to_app),
       label: const Text('Sair'),
       style: sideButtonStyle.copyWith(
-        backgroundColor: MaterialStatePropertyAll(
-          colorScheme.onSurface.withOpacity(0.5),
-        ),
+        backgroundColor: WidgetStatePropertyAll(colorScheme.onSurface),
+        foregroundColor: WidgetStatePropertyAll(colorScheme.surface),
       ),
     );
 
@@ -289,7 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
             label: const Text('Cancelar Assinatura Premium'),
             style: ElevatedButton.styleFrom(
               backgroundColor: colorScheme.secondary,
-              foregroundColor: Colors.white,
+              foregroundColor: colorScheme.onSecondary,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -307,7 +305,7 @@ class _ProfilePageState extends State<ProfilePage> {
             label: const Text('Tornar-se Premium'),
             style: ElevatedButton.styleFrom(
               backgroundColor: colorScheme.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: colorScheme.onPrimary,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -337,7 +335,7 @@ class _ProfilePageState extends State<ProfilePage> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: colorScheme.onBackground,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 8),
@@ -345,7 +343,7 @@ class _ProfilePageState extends State<ProfilePage> {
               user!.email,
               style: TextStyle(
                 fontSize: 16,
-                color: colorScheme.onBackground.withOpacity(0.7),
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: 8),
@@ -353,7 +351,7 @@ class _ProfilePageState extends State<ProfilePage> {
               user!.phone,
               style: TextStyle(
                 fontSize: 16,
-                color: colorScheme.onBackground.withOpacity(0.7),
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: 32),
@@ -361,7 +359,7 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildButtonRow(deleteAccountButton, logoutButton),
             const SizedBox(height: 16),
-            premiumButton,
+            SizedBox(width: double.infinity, child: premiumButton),
           ],
         ),
       ),

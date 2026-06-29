@@ -63,7 +63,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
@@ -181,12 +182,12 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : login,
                         child: isLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
+                            ? CircularProgressIndicator(
+                                color: colorScheme.onPrimary,
                               )
-                            : const Text(
+                            : Text(
                                 'ENTRAR',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: colorScheme.onPrimary),
                               ),
                       ),
                     ),

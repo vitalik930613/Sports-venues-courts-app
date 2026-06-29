@@ -50,8 +50,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -80,7 +82,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   const SizedBox(height: 8),
                   Text(
                     'Enviamos um código para ${widget.email}',
-                    style: const TextStyle(color: Colors.grey),
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withValues(alpha: 0.72),
+                    ),
                   ),
                   const SizedBox(height: 32),
 
@@ -176,16 +180,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       onPressed: isLoading ? null : _resetPassword,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              'REDEFINIR SENHA',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                          ? CircularProgressIndicator(
+                              color: colorScheme.onPrimary,
+                            )
+                          : const Text('REDEFINIR SENHA'),
                     ),
                   ),
                 ],

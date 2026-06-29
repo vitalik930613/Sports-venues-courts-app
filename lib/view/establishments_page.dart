@@ -46,7 +46,8 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -87,7 +88,7 @@ class _EstablishmentsPageState extends State<EstablishmentsPage> {
           );
         },
         backgroundColor: primary,
-        child: const Icon(Icons.watch, color: Colors.white),
+        child: Icon(Icons.watch, color: colorScheme.onPrimary),
       ),
     );
   }
@@ -128,14 +129,18 @@ class _EstablishmentCardState extends State<_EstablishmentCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(
+            color: colorScheme.onSurface.withValues(alpha: 0.16),
+          ),
         ),
         child: Row(
           children: [
@@ -176,7 +181,12 @@ class _EstablishmentCardState extends State<_EstablishmentCard> {
                       Expanded(
                         child: Text(
                           _loading ? 'Carregando endereço...' : _address,
-                          style: const TextStyle(fontSize: 12),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: colorScheme.onSurface.withValues(
+                              alpha: 0.72,
+                            ),
+                          ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -188,7 +198,7 @@ class _EstablishmentCardState extends State<_EstablishmentCard> {
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: Theme.of(context).colorScheme.onSurface,
+              color: colorScheme.onSurface,
               size: 16,
             ),
           ],

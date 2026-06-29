@@ -80,8 +80,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -323,18 +325,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           backgroundColor: Theme.of(
                             context,
                           ).colorScheme.primary,
+                          foregroundColor: colorScheme.onPrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: isLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
+                            ? CircularProgressIndicator(
+                                color: colorScheme.onPrimary,
                               )
-                            : const Text(
-                                'CRIAR CONTA',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                            : const Text('CRIAR CONTA'),
                       ),
                     ),
 

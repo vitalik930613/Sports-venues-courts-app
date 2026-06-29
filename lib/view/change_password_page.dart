@@ -52,14 +52,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Alterar Senha'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(title: const Text('Alterar Senha'), elevation: 0),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -184,17 +181,17 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     child: ElevatedButton(
                       onPressed: isLoading ? null : _changePassword,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              'ALTERAR SENHA',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                          ? CircularProgressIndicator(
+                              color: colorScheme.onPrimary,
+                            )
+                          : const Text('ALTERAR SENHA'),
                     ),
                   ),
                 ],

@@ -52,8 +52,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -110,18 +112,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           backgroundColor: Theme.of(
                             context,
                           ).colorScheme.primary,
+                          foregroundColor: colorScheme.onPrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: isLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
+                            ? CircularProgressIndicator(
+                                color: colorScheme.onPrimary,
                               )
-                            : const Text(
-                                'ENVIAR CÓDIGO',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                            : const Text('ENVIAR CÓDIGO'),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -131,12 +131,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         const Text('Lembrou a senha?'),
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text(
-                            'Voltar para o login',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 14, 134, 34),
-                            ),
-                          ),
+                          child: const Text('Voltar para o login'),
                         ),
                       ],
                     ),

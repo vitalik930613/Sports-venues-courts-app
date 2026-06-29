@@ -169,6 +169,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
 
     final slot = _timeSlots[_selectedSlotIndex!];
     final userId = AuthViewModel.instance.currentUser!.id;
+    var shouldResetLoading = true;
 
     setState(() => _loadingSchedule = true);
     try {
@@ -178,12 +179,15 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         endTime: slot.endTime,
       );
       if (!available) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Horário não está mais disponível')),
         );
         await _loadBookingsForDate(_selectedDate!);
         _generateTimeSlots(_selectedDate!);
+        if (!mounted) return;
         setState(() => _loadingSchedule = false);
+        shouldResetLoading = false;
         return;
       }
 
@@ -194,6 +198,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         endTime: slot.endTime,
       );
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Reserva confirmada!'),
@@ -202,8 +207,10 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
       );
       await _loadBookingsForDate(_selectedDate!);
       _generateTimeSlots(_selectedDate!);
+      if (!mounted) return;
       setState(() => _selectedSlotIndex = null);
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erro: ${e.toString()}'),
@@ -211,7 +218,9 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
         ),
       );
     } finally {
-      setState(() => _loadingSchedule = false);
+      if (mounted && shouldResetLoading) {
+        setState(() => _loadingSchedule = false);
+      }
     }
   }
 
@@ -237,6 +246,7 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.court.name)),
@@ -282,7 +292,10 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                   const SizedBox(height: 8),
                   Text(
                     _sportName(widget.court.sport),
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: colorScheme.onSurface.withValues(alpha: 0.72),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   if (_schedule != null) ...[
@@ -299,14 +312,20 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                         ),
                         Text(
                           'UYU ${_schedule!.priceUyu.toStringAsFixed(2)}',
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: colorScheme.onSurface,
+                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'Funcionamento: ${_formatTimeWithoutSeconds(_schedule!.openingTime)} - ${_formatTimeWithoutSeconds(_schedule!.closingTime)}',
-                      style: const TextStyle(fontSize: 14),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurface.withValues(alpha: 0.72),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
@@ -314,9 +333,9 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                       icon: const Icon(Icons.map),
                       label: const Text('Ver localização no mapa'),
                       style: ElevatedButton.styleFrom(
-  backgroundColor: Theme.of(context).colorScheme.primary,
-  foregroundColor: Colors.white,
-),
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                      ),
                     ),
                     const SizedBox(height: 24),
                     GestureDetector(
@@ -324,7 +343,11 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(
+                            color: colorScheme.onSurface.withValues(
+                              alpha: 0.18,
+                            ),
+                          ),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -333,11 +356,13 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Data desejada',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey,
+                                    color: colorScheme.onSurface.withValues(
+                                      alpha: 0.72,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -345,11 +370,17 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                                   _selectedDate == null
                                       ? 'Selecione uma data'
                                       : '${_selectedDate!.day.toString().padLeft(2, '0')}/${_selectedDate!.month.toString().padLeft(2, '0')}/${_selectedDate!.year}',
-                                  style: const TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: colorScheme.onSurface,
+                                  ),
                                 ),
                               ],
                             ),
-                            const Icon(Icons.calendar_today),
+                            Icon(
+                              Icons.calendar_today,
+                              color: colorScheme.onSurface,
+                            ),
                           ],
                         ),
                       ),
@@ -394,15 +425,13 @@ class _CourtDetailPageState extends State<CourtDetailPage> {
                         : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary,
+                      foregroundColor: colorScheme.onPrimary,
                       minimumSize: const Size(double.infinity, 48),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      'CONFIRMAR RESERVA',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: const Text('CONFIRMAR RESERVA'),
                   ),
                 ],
               ),
@@ -454,17 +483,16 @@ class _TimeSlotBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).colorScheme.surface;
-
-    Color textColor = Colors.black;
+    final colorScheme = Theme.of(context).colorScheme;
+    Color backgroundColor = colorScheme.surface;
+    Color textColor = colorScheme.onSurface;
 
     if (!slot.isAvailable) {
-      backgroundColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.3);
-
-      textColor = Colors.white;
+      backgroundColor = colorScheme.onSurface.withValues(alpha: 0.12);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.72);
     } else if (slot.isSelected) {
       backgroundColor = primaryColor;
-      textColor = Colors.white;
+      textColor = colorScheme.onPrimary;
     }
 
     return GestureDetector(
@@ -475,7 +503,9 @@ class _TimeSlotBox extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: slot.isSelected ? primaryColor : Colors.grey.shade300,
+            color: slot.isSelected
+                ? primaryColor
+                : colorScheme.onSurface.withValues(alpha: 0.18),
             width: slot.isSelected ? 2 : 1,
           ),
         ),
