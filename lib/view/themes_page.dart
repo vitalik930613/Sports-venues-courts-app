@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/theme/app_theme.dart';
 import 'package:mobile/view/premium_upgrade_page.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -75,17 +76,30 @@ class _ThemesPageState extends State<ThemesPage> {
     },
   ];
 
-  void _applyTheme(BuildContext context, Map<String, dynamic> theme) {
+  Future<void> _applyTheme(
+    BuildContext context,
+    Map<String, dynamic> theme,
+  ) async {
     final user = AuthViewModel.instance.currentUser;
-    final isPremiumTheme = theme['tag'] == 'Premium';
+    if (user == null) return;
 
-    if (isPremiumTheme && (user?.isPremium != true)) {
+    final themeId = theme['id'] as String;
+    final isPremiumTheme = AppThemes.isPremiumTheme(themeId);
+
+    if (isPremiumTheme && !user.isPremium) {
       _showPremiumRequiredDialog(context);
       return;
     }
 
     final provider = context.read<ThemeProvider>();
-    provider.setTheme(theme['id'] as String);
+    final applied = await provider.setTheme(
+      themeId,
+      userId: user.id,
+      isPremium: user.isPremium,
+    );
+    if (!context.mounted) return;
+    if (!applied) return;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -201,7 +215,7 @@ class _ThemeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = theme['previewColors'] as List<Color>;
-    final isPremiumTheme = theme['tag'] == 'Premium';
+    final isPremiumTheme = AppThemes.isPremiumTheme(theme['id'] as String);
     final canSelect = !isPremiumTheme || isUserPremium;
     final colorScheme = Theme.of(context).colorScheme;
     final tagColor = theme['tagColor'] as Color;

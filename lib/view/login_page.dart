@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/theme/theme_provider.dart';
 import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/view/create_account_page.dart';
 import 'package:mobile/view/forget_password_page.dart';
 import 'package:mobile/view/main_page.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -30,6 +32,14 @@ class _LoginPageState extends State<LoginPage> {
           passwordController.text,
         );
         if (success && mounted) {
+          final user = AuthViewModel.instance.currentUser;
+          if (user != null) {
+            await context.read<ThemeProvider>().syncThemeForUser(
+              userId: user.id,
+              isPremium: user.isPremium,
+            );
+          }
+          if (!mounted) return;
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => const MainPage()),
@@ -88,7 +98,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    Text('Login', style: TextStyle(color: primary)),
+                    Text(
+                      'Login',
+                      style: TextStyle(
+                        color: primary,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
 
                     const SizedBox(height: 40),
 

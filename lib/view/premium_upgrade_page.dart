@@ -124,7 +124,10 @@ class _PremiumUpgradePageState extends State<PremiumUpgradePage> {
       await AuthViewModel.instance.cancelPremium();
       if (!mounted) return;
       final themeProvider = context.read<ThemeProvider>();
-      themeProvider.setTheme('default');
+      await themeProvider.resetToDefault(
+        userId: AuthViewModel.instance.currentUser?.id,
+      );
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(

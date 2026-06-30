@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/theme/theme_provider.dart';
 import 'package:mobile/utils/theme_utils.dart';
 import 'package:mobile/viewmodel/auth_viewmodel.dart';
 import 'package:mobile/view/terms_page.dart';
+import 'package:provider/provider.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -51,6 +53,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         );
 
         if (success && mounted) {
+          final user = AuthViewModel.instance.currentUser;
+          if (user != null) {
+            await context.read<ThemeProvider>().syncThemeForUser(
+              userId: user.id,
+              isPremium: user.isPremium,
+            );
+          }
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Conta criada com sucesso!')),
           );

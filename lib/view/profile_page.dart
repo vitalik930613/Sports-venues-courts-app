@@ -118,6 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       await AuthViewModel.instance.deleteAccount();
       if (mounted) {
+        context.read<ThemeProvider>().resetToGuestDefault();
         Navigator.pop(context);
         Navigator.pushReplacement(
           context,
@@ -172,7 +173,10 @@ class _ProfilePageState extends State<ProfilePage> {
       await AuthViewModel.instance.cancelPremium();
       if (!mounted) return;
       final themeProvider = context.read<ThemeProvider>();
-      themeProvider.setTheme('default');
+      await themeProvider.resetToDefault(
+        userId: AuthViewModel.instance.currentUser?.id,
+      );
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
@@ -267,6 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
       onPressed: () async {
         await AuthViewModel.instance.logout();
         if (!context.mounted) return;
+        context.read<ThemeProvider>().resetToGuestDefault();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const LoginPage()),

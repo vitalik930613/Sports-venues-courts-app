@@ -9,7 +9,29 @@ class AppThemes {
   static const String arenaId = 'arena';
   static const String sunsetId = 'sunset';
 
-  // Função getTheme – deve existir
+  static const Set<String> premiumThemeIds = {
+    midnightId,
+    campoId,
+    arenaId,
+    sunsetId,
+  };
+
+  static const Set<String> knownThemeIds = {
+    defaultId,
+    midnightId,
+    campoId,
+    arenaId,
+    sunsetId,
+  };
+
+  static bool isPremiumTheme(String themeId) {
+    return premiumThemeIds.contains(themeId);
+  }
+
+  static bool isKnownTheme(String themeId) {
+    return knownThemeIds.contains(themeId);
+  }
+
   static ThemeData getTheme(String themeId) {
     switch (themeId) {
       case midnightId:
@@ -26,7 +48,6 @@ class AppThemes {
     }
   }
 
-  // Função _build – deve existir
   static ThemeData _build({
     required Color primary,
     required Color onPrimary,
