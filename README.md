@@ -55,6 +55,18 @@ flutter pub get
 flutter run
 ```
 
+Para apontar o app para uma API remota sem versionar a URL no repositório:
+
+```bash
+flutter run --dart-define=API_BASE_URL=https://sua-api.vercel.app
+```
+
+Para gerar build com uma API remota:
+
+```bash
+flutter build apk --dart-define=API_BASE_URL=https://sua-api.vercel.app
+```
+
 Para validar o projeto:
 
 ```bash
@@ -89,7 +101,7 @@ dart run flutter_launcher_icons
 
 ## Observações de Desenvolvimento
 
-- A URL da API está em `lib/config/api_config.dart`.
+- A URL da API pode ser sobrescrita por `--dart-define=API_BASE_URL=...`.
 - A seleção de tema é persistida localmente com `shared_preferences`.
 - Temas Premium exigem usuário com assinatura ativa.
 - Antes de abrir pull request, rode `flutter analyze` e revise alterações em assets nativos gerados.
