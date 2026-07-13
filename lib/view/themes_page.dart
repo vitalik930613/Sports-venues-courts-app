@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/theme/app_theme.dart';
-import 'package:mobile/view/premium_upgrade_page.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/theme/app_theme.dart';
+import 'package:cancha_mobile/view/premium_upgrade_page.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_provider.dart';
 

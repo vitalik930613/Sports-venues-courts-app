@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/model/user.dart';
-import 'package:mobile/theme/theme_provider.dart';
-import 'package:mobile/utils/theme_utils.dart';
-import 'package:mobile/view/premium_upgrade_page.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
-import 'package:mobile/view/login_page.dart';
-import 'package:mobile/view/change_password_page.dart';
-import 'package:mobile/view/themes_page.dart';
+import 'package:cancha_mobile/model/user.dart';
+import 'package:cancha_mobile/theme/theme_provider.dart';
+import 'package:cancha_mobile/utils/theme_utils.dart';
+import 'package:cancha_mobile/view/premium_upgrade_page.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/view/login_page.dart';
+import 'package:cancha_mobile/view/change_password_page.dart';
+import 'package:cancha_mobile/view/themes_page.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {

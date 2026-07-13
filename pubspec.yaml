@@ -1,5 +1,5 @@
-name: mobile
-description: "A new Flutter project."
+name: cancha_mobile
+description: "Flutter application for discovering sports venues, exploring courts, and managing bookings with Cancha."
 publish_to: "none"
 version: 0.1.0+1
 

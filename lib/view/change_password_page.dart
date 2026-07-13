@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/services/api_client.dart';
-import 'package:mobile/utils/theme_utils.dart';
+import 'package:cancha_mobile/services/api_client.dart';
+import 'package:cancha_mobile/utils/theme_utils.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/model/court.dart';
-import 'package:mobile/model/court_booking.dart';
-import 'package:mobile/model/court_schedule.dart';
-import 'package:mobile/model/establishment.dart';
-import 'package:mobile/utils/image_utils.dart';
-import 'package:mobile/view/map_page.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
-import 'package:mobile/viewmodel/court_schedule_viewmodel.dart';
-import 'package:mobile/viewmodel/booking_viewmodel.dart';
+import 'package:cancha_mobile/model/court.dart';
+import 'package:cancha_mobile/model/court_booking.dart';
+import 'package:cancha_mobile/model/court_schedule.dart';
+import 'package:cancha_mobile/model/establishment.dart';
+import 'package:cancha_mobile/utils/image_utils.dart';
+import 'package:cancha_mobile/view/map_page.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/viewmodel/court_schedule_viewmodel.dart';
+import 'package:cancha_mobile/viewmodel/booking_viewmodel.dart';
 
 class CourtDetailPage extends StatefulWidget {
   final Court court;

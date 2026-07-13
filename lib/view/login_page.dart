@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/theme/theme_provider.dart';
-import 'package:mobile/utils/theme_utils.dart';
-import 'package:mobile/view/create_account_page.dart';
-import 'package:mobile/view/forget_password_page.dart';
-import 'package:mobile/view/main_page.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/theme/theme_provider.dart';
+import 'package:cancha_mobile/utils/theme_utils.dart';
+import 'package:cancha_mobile/view/create_account_page.dart';
+import 'package:cancha_mobile/view/forget_password_page.dart';
+import 'package:cancha_mobile/view/main_page.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {

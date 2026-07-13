@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/theme/theme_provider.dart';
-import 'package:mobile/utils/theme_utils.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
-import 'package:mobile/view/terms_page.dart';
+import 'package:cancha_mobile/theme/theme_provider.dart';
+import 'package:cancha_mobile/utils/theme_utils.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/view/terms_page.dart';
 import 'package:provider/provider.dart';
 
 class CreateAccountPage extends StatefulWidget {

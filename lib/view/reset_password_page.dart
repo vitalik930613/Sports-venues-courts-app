@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/utils/theme_utils.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/utils/theme_utils.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String email;
