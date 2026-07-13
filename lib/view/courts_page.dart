@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/model/establishment.dart';
-import 'package:mobile/model/court.dart';
-import 'package:mobile/utils/image_utils.dart';
-import 'package:mobile/view/court_detail_page.dart';
-import 'package:mobile/viewmodel/court_viewmodel.dart';
+import 'package:cancha_mobile/model/establishment.dart';
+import 'package:cancha_mobile/model/court.dart';
+import 'package:cancha_mobile/utils/image_utils.dart';
+import 'package:cancha_mobile/view/court_detail_page.dart';
+import 'package:cancha_mobile/viewmodel/court_viewmodel.dart';
 
 class CourtsPage extends StatefulWidget {
   final Establishment establishment;

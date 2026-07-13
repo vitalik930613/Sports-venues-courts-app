@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/utils/geocoding_helper.dart';
-import 'package:mobile/utils/theme_utils.dart';
-import 'package:mobile/view/courts_page.dart';
-import 'package:mobile/view/wearable/wearable_screen.dart';
-import 'package:mobile/viewmodel/establishment_viewmodel.dart';
-import 'package:mobile/model/establishment.dart';
+import 'package:cancha_mobile/utils/geocoding_helper.dart';
+import 'package:cancha_mobile/utils/theme_utils.dart';
+import 'package:cancha_mobile/view/courts_page.dart';
+import 'package:cancha_mobile/view/wearable/wearable_screen.dart';
+import 'package:cancha_mobile/viewmodel/establishment_viewmodel.dart';
+import 'package:cancha_mobile/model/establishment.dart';
 
 class EstablishmentsPage extends StatefulWidget {
   const EstablishmentsPage({super.key});

@@ -1,107 +1,77 @@
 # Cancha Mobile
 
-Aplicativo Flutter para descoberta de estabelecimentos esportivos, consulta de quadras e gerenciamento de reservas. O app centraliza a jornada do jogador: criar conta, encontrar locais, consultar horários disponíveis, confirmar reservas e acompanhar seus agendamentos.
+## Overview
 
-## Funcionalidades
+Cancha Mobile is a Flutter application for discovering sports venues, exploring available courts and schedules, and managing bookings. It provides the player-facing experience for the Cancha platform across Android, iOS, and the web.
 
-- Autenticação de usuários com login, cadastro, recuperação e redefinição de senha.
-- Listagem de estabelecimentos esportivos com localização e imagem.
-- Consulta de quadras por estabelecimento, modalidade e detalhes da quadra.
-- Visualização de horários de funcionamento, preços e disponibilidade.
-- Criação e cancelamento de reservas.
-- Tela de calendário com reservas do usuário.
-- Integração com mapa para visualizar a localização do estabelecimento.
-- Perfil do usuário com gerenciamento de conta e assinatura Premium.
-- Temas personalizáveis, incluindo temas exclusivos para usuários Premium.
-- Splash screen nativa e ícones configurados para Android e iOS.
-- Tela Wearable para experiência simplificada em dispositivo vestível.
+## Features
 
-## Tecnologias
+- User registration, authentication, password recovery, and profile management
+- Sports venue discovery with location and image information
+- Court browsing by venue, sport, availability, and price
+- Booking creation, cancellation, and calendar history
+- Interactive maps and route information
+- Custom themes and Premium-specific options
+- Native splash screens and application icons
+- Simplified wearable experience
 
-- Flutter
-- Dart
-- Provider para gerenciamento de estado
-- HTTP para comunicação com API
-- Shared Preferences para persistência local
-- Flutter Map, LatLong2 e Geolocator para mapa e localização
-- Flutter Native Splash para splash screen nativa
-- Flutter Launcher Icons para geração dos ícones do app
+## Tech Stack
 
-## Estrutura do Projeto
+- Flutter and Dart
+- Provider for state management
+- HTTP for backend communication
+- Shared Preferences for local persistence
+- Flutter Map, LatLong2, and Geolocator for maps and location
+- Flutter Native Splash and Flutter Launcher Icons for native assets
+
+## Project Structure
 
 ```text
 lib/
-  config/       Configurações globais, incluindo URL da API
-  model/        Modelos de domínio
-  services/     Cliente HTTP e integrações
-  theme/        Temas e provider de tema
-  utils/        Utilitários compartilhados
-  view/         Telas do aplicativo
-  viewmodel/    Regras de apresentação e comunicação com serviços
+  config/       Application configuration
+  model/        Domain models
+  services/     API client and integrations
+  theme/        Themes and theme state
+  utils/        Shared utilities
+  view/         Application screens
+  viewmodel/    Presentation logic and API coordination
 ```
 
-## Requisitos
+## Requirements
 
-- Flutter SDK compatível com Dart `^3.11.1`
-- Android Studio ou Xcode para builds nativos
-- API backend disponível em:
-  - Web: `http://localhost:3000`
-  - Android emulator: `http://10.0.2.2:3000`
+- Flutter SDK with support for Dart `^3.11.1`
+- Android Studio for Android development or Xcode for iOS development
+- A running Cancha backend instance
 
-## Como Rodar
+## Configuration
+
+The application uses `http://localhost:3000` on the web and `http://10.0.2.2:3000` on the Android emulator by default.
+
+Set a different backend URL at compile time with `API_BASE_URL`:
 
 ```bash
+flutter run --dart-define=API_BASE_URL=https://your-api.example.com
+```
+
+## Getting Started
+
+```bash
+git clone https://github.com/cancha-sports/mobile.git
+cd mobile
 flutter pub get
 flutter run
 ```
 
-Para apontar o app para uma API remota sem versionar a URL no repositório:
+## Available Commands
 
-```bash
-flutter run --dart-define=API_BASE_URL=https://sua-api.vercel.app
-```
+| Command | Description |
+| --- | --- |
+| `flutter run` | Run the application on a connected target |
+| `flutter analyze` | Run static analysis |
+| `flutter build apk --dart-define=API_BASE_URL=https://your-api.example.com` | Build an Android APK with a custom backend URL |
+| `dart run flutter_native_splash:create` | Regenerate native splash assets |
+| `dart run flutter_launcher_icons` | Regenerate application icons |
 
-Para gerar build com uma API remota:
+## Related Repository
 
-```bash
-flutter build apk --dart-define=API_BASE_URL=https://sua-api.vercel.app
-```
-
-Para validar o projeto:
-
-```bash
-flutter analyze
-```
-
-## Splash Screen e Ícones
-
-A splash screen é configurada via `flutter_native_splash` no `pubspec.yaml`.
-
-Para regenerar:
-
-```bash
-dart run flutter_native_splash:create
-```
-
-Os ícones do app são configurados via `flutter_launcher_icons`, usando `assets/images/cancha_apk.png`.
-
-Para regenerar:
-
-```bash
-dart run flutter_launcher_icons
-```
-
-## Assets Principais
-
-- `assets/images/cancha_logo.png`: logo principal.
-- `assets/images/cancha_dark_logo.png`: logo para splash/tema escuro.
-- `assets/images/cancha_apk.png`: ícone do aplicativo.
-- `assets/images/default_*.jpg`: imagens padrão por modalidade.
-- `assets/images/default_perfil.jpg`: imagem padrão de perfil.
-
-## Observações de Desenvolvimento
-
-- A URL da API pode ser sobrescrita por `--dart-define=API_BASE_URL=...`.
-- A seleção de tema é persistida localmente com `shared_preferences`.
-- Temas Premium exigem usuário com assinatura ativa.
-- Antes de abrir pull request, rode `flutter analyze` e revise alterações em assets nativos gerados.
+- [Cancha Backend](https://github.com/cancha-sports/backend)

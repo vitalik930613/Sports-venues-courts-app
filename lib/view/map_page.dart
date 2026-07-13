@@ -131,7 +131,7 @@ class _MapPageState extends State<MapPage> {
                 urlTemplate:
                     'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
                 subdomains: const ['a', 'b', 'c', 'd'],
-                userAgentPackageName: 'com.example.mobile',
+                userAgentPackageName: 'com.canchasports.cancha',
                 maxZoom: 20,
                 maxNativeZoom: 19,
               ),

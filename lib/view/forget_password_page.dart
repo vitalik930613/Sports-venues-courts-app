@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/utils/theme_utils.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
-import 'package:mobile/view/reset_password_page.dart';
+import 'package:cancha_mobile/utils/theme_utils.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/view/reset_password_page.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});

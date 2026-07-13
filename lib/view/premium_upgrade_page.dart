@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/theme/theme_provider.dart';
-import 'package:mobile/viewmodel/auth_viewmodel.dart';
+import 'package:cancha_mobile/theme/theme_provider.dart';
+import 'package:cancha_mobile/viewmodel/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class PremiumUpgradePage extends StatefulWidget {
