@@ -56,7 +56,7 @@ flutter run --dart-define=API_BASE_URL=https://your-api.example.com
 ## Getting Started
 
 ```bash
-git clone https://github.com/cancha-sports/mobile.git
+git clone https://github.com/vitalik930613/Sports-venues-courts-app
 cd mobile
 flutter pub get
 flutter run
@@ -73,5 +73,3 @@ flutter run
 | `dart run flutter_launcher_icons` | Regenerate application icons |
 
 ## Related Repository
-
-- [Cancha Backend](https://github.com/cancha-sports/backend)
